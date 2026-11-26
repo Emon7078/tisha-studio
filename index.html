@@ -1,0 +1,3163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6d28d9">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="তিশা ডিজিটাল স্টুডিও">
+<link id="pwaManifestLink" rel="manifest" href="data:application/manifest+json,%7B%7D">
+<link id="pwaAppleIcon" rel="apple-touch-icon" href="">
+<title>তিশা ডিজিটাল স্টুডিও – হিসাব ও ভাউচার Pro</title>
+<style>
+:root {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --tx: #0f172a;
+  --mut: #64748b;
+  --bd: #e2e8f0;
+  --p: #6d28d9;
+  --p2: #2563eb;
+  --g: #16a34a;
+  --r: #dc2626;
+  --o: #ea580c;
+  --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --tx: #f1f5f9;
+    --mut: #94a3b8;
+    --bd: #334155;
+    --shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --tx: #f1f5f9;
+  --mut: #94a3b8;
+  --bd: #334155;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  transition: background 0.2s, color 0.2s;
+}
+.wrap { max-width: 1140px; margin: 0 auto; padding: 12px; }
+
+/* Header */
+header {
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9, #be185d);
+  color: #fff;
+  border-radius: 18px;
+  padding: 16px 18px;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(109, 40, 217, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+header h1 { margin: 0; font-size: 24px; letter-spacing: 0.2px; }
+header p { margin: 3px 0 0; font-size: 13px; opacity: 0.95; }
+.theme-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.theme-btn:hover { background: rgba(255, 255, 255, 0.3); }
+
+/* Offline / Online & Sync Status Bar */
+.net-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-top: 10px;
+  font-size: 13px;
+  box-shadow: var(--shadow);
+}
+.net-left, .net-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.net-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.net-online { background: rgba(22, 163, 74, 0.15); color: var(--g); border: 1px solid rgba(22, 163, 74, 0.35); }
+.net-offline { background: rgba(220, 38, 38, 0.15); color: var(--r); border: 1px solid rgba(220, 38, 38, 0.35); }
+.sync-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: 600;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--tx);
+  border: 1px solid var(--bd);
+}
+.sync-pending { background: rgba(234, 88, 12, 0.14); color: var(--o); border-color: rgba(234, 88, 12, 0.35); }
+.sync-synced { background: rgba(37, 99, 235, 0.13); color: var(--p2); border-color: rgba(37, 99, 235, 0.3); }
+
+/* Navigation Tabs */
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin: 12px 0;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+.tabs button {
+  flex: 1;
+  white-space: nowrap;
+  background: var(--card);
+  color: var(--tx);
+  border: 1px solid var(--bd);
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.tabs button.on {
+  background: var(--p);
+  color: #fff;
+  border-color: var(--p);
+  box-shadow: 0 4px 12px rgba(109, 40, 217, 0.28);
+}
+
+/* Cards & Grids */
+.card {
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+}
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--bd);
+  padding-bottom: 8px;
+}
+.card-head h3 { margin: 0; font-size: 17px; }
+h3 { margin: 0 0 10px; font-size: 17px; }
+
+.g { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media(min-width: 640px) { .g { grid-template-columns: 1fr 1fr; } }
+.g3 { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media(min-width: 560px) { .g3 { grid-template-columns: 1fr 1fr 1fr; } }
+.g4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media(min-width: 768px) { .g4 { grid-template-columns: repeat(4, 1fr); } }
+.g5 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media(min-width: 820px) { .g5 { grid-template-columns: repeat(5, 1fr); } }
+
+/* Cascading Address Box */
+.addr-box {
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 12px;
+  margin-top: 12px;
+}
+.addr-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.addr-head strong { font-size: 14px; color: var(--p); }
+.addr-preview {
+  margin-top: 8px;
+  padding: 7px 10px;
+  background: var(--card);
+  border: 1px dashed var(--p2);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--tx);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+label { display: block; font-size: 13px; color: var(--mut); margin-bottom: 4px; font-weight: 500; }
+input, select, textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--tx);
+  font: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--p); }
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  background: var(--p);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: opacity 0.15s, transform 0.1s;
+}
+button:active { transform: scale(0.98); }
+button:hover { opacity: 0.92; }
+.b2 { background: var(--p2); }
+.bg { background: var(--g); }
+.br { background: var(--r); }
+.bo { background: var(--o); }
+.bwa { background: #16a34a; }
+.bmut { background: var(--mut); }
+.sm { padding: 5px 9px; font-size: 12px; border-radius: 8px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.row button { flex: 1; min-width: 140px; }
+
+/* Stats Grid */
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+@media(min-width: 768px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+.st {
+  border-radius: 14px;
+  color: #fff;
+  padding: 13px 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.st small { display: block; font-size: 12px; opacity: 0.92; }
+.st b { font-size: 20px; display: block; margin-top: 2px; }
+
+/* Tables */
+.tw { overflow-x: auto; border-radius: 10px; border: 1px solid var(--bd); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 580px; }
+th { background: var(--p2); color: #fff; padding: 9px 8px; text-align: left; font-weight: 600; white-space: nowrap; }
+td { padding: 8px; border-bottom: 1px solid var(--bd); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(124, 58, 237, 0.04); }
+
+.due, .low { color: var(--r); font-weight: 700; }
+.ok { color: var(--g); font-weight: 700; }
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-r { background: rgba(220, 38, 38, 0.14); color: var(--r); }
+.badge-g { background: rgba(22, 163, 74, 0.14); color: var(--g); }
+.badge-b { background: rgba(37, 99, 235, 0.14); color: var(--p2); }
+
+/* Quick Preset Chips */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip {
+  background: var(--bg);
+  color: var(--tx);
+  border: 1px solid var(--bd);
+  border-radius: 99px;
+  padding: 5px 11px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chip:hover, .chip.active {
+  background: var(--p);
+  color: #fff;
+  border-color: var(--p);
+}
+
+.tot { text-align: right; margin-top: 10px; line-height: 1.75; font-size: 14.5px; }
+
+/* Chart Canvas */
+.chart-box { width: 100%; height: 240px; position: relative; margin-top: 8px; }
+canvas#salesChart { width: 100%; height: 100%; display: block; }
+
+/* Toast Notification */
+#toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #0f172a;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  transition: transform 0.25s ease;
+  pointer-events: none;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Modal Overlay (Voucher & Custom Dialogs) */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(3px);
+  overflow: auto;
+  z-index: 100;
+  padding: 12px;
+}
+.modal-box {
+  background: var(--card);
+  color: var(--tx);
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid var(--bd);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+}
+
+/* Voucher Preview Styles */
+#vch .bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  max-width: 780px;
+  margin: 0 auto 10px;
+}
+#vch .bar button { flex: 1; min-width: 110px; padding: 9px 10px; font-size: 13px; }
+#vp {
+  background: #fff;
+  color: #000;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 22px;
+  border: 2px solid #000;
+  border-radius: 4px;
+  transition: max-width 0.2s;
+}
+#vp table { min-width: 0; width: 100%; border-collapse: collapse; margin: 10px 0; }
+#vp th { background: #e5e7eb; color: #000; border: 1px solid #000; padding: 6px; font-size: 13px; }
+#vp td { border: 1px solid #333; padding: 6px; font-size: 13px; color: #000; }
+.vh-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+.vh { text-align: left; flex: 1; }
+.vh h2 { margin: 0; font-size: 25px; color: #000; }
+.vh p { margin: 2px 0; font-size: 12.5px; color: #111; }
+.qr-box { text-align: center; flex-shrink: 0; }
+.qr-box canvas { border: 1px solid #000; padding: 2px; background: #fff; }
+.qr-box small { display: block; font-size: 9px; color: #333; margin-top: 1px; }
+.sig { display: flex; justify-content: space-between; margin-top: 48px; font-size: 13px; color: #000; }
+.sig span { border-top: 1px solid #000; padding-top: 4px; min-width: 120px; text-align: center; }
+
+/* POS 80mm Thermal Mode */
+#vp.pos-mode {
+  max-width: 310px;
+  padding: 12px 10px;
+  font-size: 12px;
+  border: 1px dashed #000;
+}
+#vp.pos-mode .vh-wrap { flex-direction: column; text-align: center; border-bottom: 1px dashed #000; }
+#vp.pos-mode .vh { text-align: center; }
+#vp.pos-mode .vh h2 { font-size: 18px; }
+#vp.pos-mode .vh p { font-size: 11px; }
+#vp.pos-mode th, #vp.pos-mode td { padding: 4px 3px; font-size: 11px; border: none; border-bottom: 1px dashed #666; }
+#vp.pos-mode th { background: none; border-top: 1px dashed #000; border-bottom: 1px dashed #000; }
+#vp.pos-mode .sig { margin-top: 24px; font-size: 11px; }
+#vp.pos-mode .sig span { min-width: 85px; }
+
+@media print {
+  body.pv .wrap, body.pv #toast, body.pv #dlg { display: none !important; }
+  body.pv #vch { display: block; position: static; background: none; padding: 0; }
+  body.pv .bar { display: none !important; }
+  #vp { border: 0 !important; max-width: none !important; padding: 0 !important; box-shadow: none !important; }
+  #vp.pos-mode { max-width: 76mm !important; margin: 0 auto !important; }
+  @page { margin: 10mm; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <button class="theme-btn" id="themeToggle" title="ডার্ক/লাইট মোড পরিবর্তন">🌓 থিম</button>
+    <h1>📸 তিশা ডিজিটাল স্টুডিও</h1>
+    <p>Every Moment of Memories, In Our Frame · 100% Assured Service</p>
+    <p>ধলগ্রাম বাজার, বাঘারপাড়া, যশোর · প্রোঃ মোঃ ইমন হোসেন · মোবাইল: 01892-287078, 01973-287078</p>
+  </header>
+
+  <!-- Live Offline/Online & Sync Status Bar -->
+  <div class="net-bar" id="netStatusBar">
+    <div class="net-left">
+      <span id="netBadge" class="net-pill net-online">🟢 অনলাইন (ইন্টারনেট চালু)</span>
+      <span id="pendingSyncBadge" class="sync-pill">⏳ পেন্ডিং সিঙ্ক: ০টি পরিবর্তন</span>
+      <span id="lastSyncText" style="color:var(--mut);font-size:12px">সর্বশেষ সিঙ্ক: এখনো হয়নি</span>
+    </div>
+    <div class="net-right">
+      <button type="button" class="sm b2" id="quickSyncBtn">🔄 এখনই সিঙ্ক করুন</button>
+      <button type="button" class="sm bmut" id="openSyncTabBtn">☁️ সিঙ্ক সেটিংস</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button data-t="d" class="on">⚡ দৈনিক আয়-ব্যয়</button>
+    <button data-t="s">🧾 নতুন ভাউচার</button>
+    <button data-t="l">📋 ভাউচার তালিকা</button>
+    <button data-t="c">📒 কাস্টমার খাতা</button>
+    <button data-t="k">📦 স্টক</button>
+    <button data-t="x">🏷️ কাজের রেট</button>
+    <button data-t="r">📊 রিপোর্ট ও ড্যাশবোর্ড</button>
+    <button data-t="b">💾 ব্যাকআপ ও এক্সপোর্ট</button>
+  </div>
+
+  <!-- TAB 0: DAILY CASHBOOK (QUICK INCOME, DEPOSIT & EXPENSE WITHOUT VOUCHER) -->
+  <section id="t-d">
+    <div class="stats" id="dailyCashStats"></div>
+
+    <div class="g">
+      <!-- Quick Income & Deposit Card -->
+      <div class="card" style="border-top: 4px solid var(--g);">
+        <div class="card-head">
+          <h3 style="color:var(--g)">➕ ভাউচার ছাড়া নগদ আয় ও জমা</h3>
+          <span class="badge badge-g">ক্যাশ ইন ও জমা</span>
+        </div>
+        <label>দ্রুত বাছাই করুন (১-ক্লিক প্রিসেট):</label>
+        <div class="chips" id="incChips">
+          <button type="button" class="chip" data-val="ফটোকপি">ফটোকপি</button>
+          <button type="button" class="chip" data-val="পাসপোর্ট সাইজ ছবি">পাসপোর্ট ছবি</button>
+          <button type="button" class="chip" data-val="কম্পিউটার প্রিন্ট">প্রিন্ট</button>
+          <button type="button" class="chip" data-val="লেমিনেশন">লেমিনেশন</button>
+          <button type="button" class="chip" data-val="স্ক্যানিং">স্ক্যানিং</button>
+          <button type="button" class="chip" data-val="অনলাইন আবেদন">অনলাইন আবেদন</button>
+          <button type="button" class="chip" data-val="কম্পোজ / টাইপিং">কম্পোজ</button>
+          <button type="button" class="chip" data-val="অন্যান্য নগদ আয়">অন্যান্য</button>
+        </div>
+        <div class="g">
+          <div>
+            <label>তারিখ</label>
+            <input type="date" id="qidt">
+          </div>
+          <div>
+            <label>নগদ আয়ের পরিমাণ ৳ *</label>
+            <input type="number" id="qia" placeholder="0">
+          </div>
+        </div>
+        <div class="g" style="margin-top:8px">
+          <div>
+            <label>আয়ের বিবরণ *</label>
+            <input id="qid" placeholder="যেমন: ফটোকপি ১০ কপি / পাসপোর্ট ছবি">
+          </div>
+          <div>
+            <label>জমা ৳ (ব্যাংক / হাতে জমা - ঐচ্ছিক)</label>
+            <input type="number" id="qidep" placeholder="0">
+          </div>
+        </div>
+        <div style="margin-top:8px">
+          <label>নোট / কাস্টমার তথ্য (ঐচ্ছিক)</label>
+          <input id="qin" placeholder="যেমন: সকল কাস্টমার / নগদ">
+        </div>
+        <div class="row">
+          <button class="bg" id="qiadd">➕ নগদ আয় ও জমা যোগ করুন</button>
+          <button class="b2" id="qdepOnlyBtn" type="button">🏦 শুধু জমা যোগ করুন</button>
+        </div>
+      </div>
+
+      <!-- Quick Expense Card -->
+      <div class="card" style="border-top: 4px solid var(--r);">
+        <div class="card-head">
+          <h3 style="color:var(--r)">➖ দৈনিক খরচ / ব্যয়</h3>
+          <span class="badge badge-r">ক্যাশ আউট</span>
+        </div>
+        <label>দ্রুত বাছাই করুন (১-ক্লিক প্রিসেট):</label>
+        <div class="chips" id="expChips">
+          <button type="button" class="chip" data-cat="অন্যান্য খরচ" data-val="চা-নাস্তা ও আপ্যায়ন">চা-নাস্তা</button>
+          <button type="button" class="chip" data-cat="কালি ও পেপার" data-val="কাগজ / কালি ক্রয়">কাগজ/কালি ক্রয়</button>
+          <button type="button" class="chip" data-cat="বিদ্যুৎ বিল" data-val="বিদ্যুৎ বিল">বিদ্যুৎ বিল</button>
+          <button type="button" class="chip" data-cat="দোকান ভাড়া" data-val="দোকান ভাড়া">দোকান ভাড়া</button>
+          <button type="button" class="chip" data-cat="ইন্টারনেট ও মোবাইল" data-val="ইন্টারনেট / মোবাইল রিচার্জ">ইন্টারনেট/মোবাইল</button>
+          <button type="button" class="chip" data-cat="অন্যান্য খরচ" data-val="যাতায়াত ভাড়া">যাতায়াত</button>
+          <button type="button" class="chip" data-cat="যন্ত্রপাতি মেরামত" data-val="যন্ত্রপাতি মেরামত">মেরামত</button>
+          <button type="button" class="chip" data-cat="অন্যান্য খরচ" data-val="অন্যান্য দোকান খরচ">অন্যান্য</button>
+        </div>
+        <div class="g">
+          <div>
+            <label>তারিখ</label>
+            <input type="date" id="edt">
+          </div>
+          <div>
+            <label>টাকার পরিমাণ ৳ *</label>
+            <input type="number" id="ea" placeholder="0">
+          </div>
+        </div>
+        <div class="g" style="margin-top:8px">
+          <div>
+            <label>খরচের খাত</label>
+            <select id="ecat">
+              <option value="কালি ও পেপার">কালি ও পেপার</option>
+              <option value="দোকান ভাড়া">দোকান ভাড়া</option>
+              <option value="বিদ্যুৎ বিল">বিদ্যুৎ বিল</option>
+              <option value="ইন্টারনেট ও মোবাইল">ইন্টারনেট ও মোবাইল</option>
+              <option value="যন্ত্রপাতি মেরামত">যন্ত্রপাতি মেরামত</option>
+              <option value="অন্যান্য খরচ" selected>অন্যান্য খরচ</option>
+            </select>
+          </div>
+          <div>
+            <label>খরচের বিবরণ *</label>
+            <input id="et" placeholder="যেমন: চা-নাস্তা / A4 পেপার রিম">
+          </div>
+        </div>
+        <div class="row">
+          <button class="br" id="eadd">➖ খরচ যোগ করুন</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Combined Cashbook Log -->
+    <div class="card">
+      <div class="card-head">
+        <h3>📒 দৈনিক আয়, ব্যয় ও জমার তালিকা (ভাউচার ছাড়া)</h3>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          <input type="date" id="dfilterDate" style="width:155px;padding:6px 10px" title="তারিখ অনুযায়ী ফিল্টার">
+          <button class="sm bmut" id="dShowAllBtn" type="button">সব তারিখ</button>
+          <select id="dfilterType" style="width:150px;padding:6px 10px">
+            <option value="all">সকল লেনদেন</option>
+            <option value="inc">শুধুমাত্র আয়</option>
+            <option value="exp">শুধুমাত্র ব্যয়</option>
+            <option value="dep">শুধুমাত্র জমা</option>
+          </select>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>তারিখ</th>
+              <th>ধরন</th>
+              <th>বিবরণ ও নোট</th>
+              <th>টাকা</th>
+              <th>অ্যাকশন</th>
+            </tr>
+          </thead>
+          <tbody id="dailyCashTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 1: NEW SALE / VOUCHER WITH CASCADING ADDRESS SELECTOR -->
+  <section id="t-s" hidden>
+    <div class="card">
+      <div class="card-head">
+        <h3 id="saleFormTitle">🧾 নতুন বিক্রয় / ভাউচার তৈরি</h3>
+        <button class="sm bmut" id="cancelEditBtn" style="display:none">✖ এডিট বাতিল</button>
+      </div>
+      <div class="g3">
+        <div>
+          <label>তারিখ</label>
+          <input type="date" id="dt">
+        </div>
+        <div>
+          <label>কাস্টমারের নাম * (পুরনো নাম লিখলে সাজেশন আসবে)</label>
+          <input id="cn" list="custNames" placeholder="কাস্টমারের নাম লিখুন">
+          <datalist id="custNames"></datalist>
+        </div>
+        <div>
+          <label>মোবাইল নম্বর (WhatsApp এর জন্য)</label>
+          <input id="cp" type="tel" list="custPhones" placeholder="01XXXXXXXXX">
+          <datalist id="custPhones"></datalist>
+        </div>
+      </div>
+
+      <!-- Cascading Address Selector Box -->
+      <div class="addr-box">
+        <div class="addr-head">
+          <strong>📍 কাস্টমারের ঠিকানা (বিভাগ → জেলা → উপজেলা → ইউনিয়ন → গ্রাম)</strong>
+          <div style="display:flex;gap:6px">
+            <button type="button" class="sm b2" id="resetLocalAddrBtn" title="ডিফল্ট বাঘারপাড়া/ধলগ্রাম সেট করুন">🏠 ধলগ্রাম/বাঘারপাড়া</button>
+            <button type="button" class="sm bmut" id="clearAddrBtn" title="ঠিকানা ফাঁকা করুন">✖ ফাঁকা</button>
+          </div>
+        </div>
+        <div class="g5">
+          <div>
+            <label>১. বিভাগ (Division)</label>
+            <select id="addrDiv"></select>
+          </div>
+          <div>
+            <label>২. জেলা (District)</label>
+            <select id="addrDist"></select>
+          </div>
+          <div>
+            <label>৩. উপজেলা / থানা</label>
+            <input id="addrUpz" list="upzList" placeholder="উপজেলা নির্বাচন/লিখুন">
+            <datalist id="upzList"></datalist>
+          </div>
+          <div>
+            <label>৪. ইউনিয়ন / পৌরসভা</label>
+            <input id="addrUni" list="uniList" placeholder="ইউনিয়ন নির্বাচন/লিখুন">
+            <datalist id="uniList"></datalist>
+          </div>
+          <div>
+            <label>৫. গ্রাম / মহল্লা / বাজার</label>
+            <input id="addrVil" list="vilList" placeholder="গ্রামের নাম লিখুন">
+            <datalist id="vilList"></datalist>
+          </div>
+        </div>
+        <div class="addr-preview">
+          <span id="addrPreviewText">পূর্ণ ঠিকানা: —</span>
+          <label style="margin:0;display:inline-flex;align-items:center;gap:4px;cursor:pointer;font-size:12px;color:var(--p2)">
+            <input type="checkbox" id="manualAddrToggle" style="width:auto;margin:0"> ম্যানুয়াল ঠিকানা লিখব
+          </label>
+        </div>
+        <div id="manualAddrWrap" style="display:none;margin-top:8px">
+          <input id="ca" placeholder="সম্পূর্ণ ঠিকানা নিজের মতো করে লিখুন">
+        </div>
+      </div>
+
+      <hr style="border:0;border-top:1px solid var(--bd);margin:14px 0">
+
+      <div class="g">
+        <div>
+          <label>সেবা বা স্টক পণ্য নির্বাচন করুন</label>
+          <select id="isel"></select>
+        </div>
+        <div>
+          <label>অথবা কাস্টম সেবার নাম লিখুন (ঐচ্ছিক)</label>
+          <input id="icustom" placeholder="তালিকার বাইরে কোনো কাজ হলে এখানে লিখুন">
+        </div>
+      </div>
+
+      <label style="margin:8px 0 0;display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:var(--p2)">
+        <input type="checkbox" id="autoAdd" checked style="width:auto;margin:0"> ⚡ বিবরণ বাছাই করলে সাথে সাথে তালিকায় যোগ হবে
+      </label>
+      <div class="g3" style="margin-top:8px">
+        <div>
+          <label>পরিমাণ</label>
+          <input type="number" id="iq" value="1" min="0.1" step="any">
+        </div>
+        <div>
+          <label>একক দাম ৳</label>
+          <input type="number" id="ir" placeholder="0">
+        </div>
+        <div style="display:flex;align-items:end">
+          <button class="bo" id="iadd" style="width:100%">➕ তালিকায় যোগ</button>
+        </div>
+      </div>
+
+      <div class="tw" style="margin-top:12px">
+        <table>
+          <thead>
+            <tr>
+              <th>নং</th>
+              <th>বিবরণ</th>
+              <th>পরিমাণ</th>
+              <th>দাম</th>
+              <th>মোট</th>
+              <th>অ্যাকশন</th>
+            </tr>
+          </thead>
+          <tbody id="ct"></tbody>
+        </table>
+      </div>
+
+      <div class="g" style="margin-top:12px">
+        <div>
+          <label>ছাড় / ডিসকাউন্ট (৳)</label>
+          <input type="number" id="dc" placeholder="0">
+        </div>
+        <div>
+          <label>জমা / পরিশোধ (৳)</label>
+          <input type="number" id="pd" placeholder="0">
+        </div>
+      </div>
+
+      <div class="tot" id="ctot"></div>
+      <div class="row">
+        <button class="bg" id="save">✅ সেভ করে ভাউচার দেখুন</button>
+        <button class="b2" id="fullPaidBtn" type="button">💵 সম্পূর্ণ নগদ পরিশোধ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 2: VOUCHER LIST -->
+  <section id="t-l" hidden>
+    <div class="card">
+      <div class="g" style="margin-bottom:10px">
+        <input id="q" placeholder="🔍 কাস্টমারের নাম, মোবাইল, ঠিকানা বা ভাউচার নং দিয়ে খুঁজুন">
+        <select id="lfilter">
+          <option value="all">সকল ভাউচার</option>
+          <option value="due">শুধুমাত্র বাকি ভাউচার</option>
+          <option value="paid">সম্পূর্ণ পরিশোধিত ভাউচার</option>
+        </select>
+      </div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>ভাউচার</th>
+              <th>তারিখ</th>
+              <th>কাস্টমার ও ঠিকানা</th>
+              <th>মোট</th>
+              <th>জমা</th>
+              <th>বাকি</th>
+              <th>অ্যাকশন</th>
+            </tr>
+          </thead>
+          <tbody id="lt"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: CUSTOMER DUE LEDGER -->
+  <section id="t-c" hidden>
+    <div class="stats" id="custStats"></div>
+    <div class="card">
+      <div class="card-head">
+        <h3>👥 কাস্টমার ও বাকি খাতা (Customer Ledger)</h3>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <input id="cq" placeholder="🔍 কাস্টমার বা ঠিকানা খুঁজুন..." style="width:200px;padding:6px 10px">
+          <select id="cfilter" style="width:150px;padding:6px 10px">
+            <option value="due">বাকি আছে (Due Only)</option>
+            <option value="all">সকল কাস্টমার</option>
+          </select>
+        </div>
+      </div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>কাস্টমারের নাম</th>
+              <th>মোবাইল ও ঠিকানা</th>
+              <th>ভাউচার</th>
+              <th>মোট বিল</th>
+              <th>মোট জমা</th>
+              <th>মোট বাকি</th>
+              <th>অ্যাকশন</th>
+            </tr>
+          </thead>
+          <tbody id="custTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 4: STOCK MANAGEMENT -->
+  <section id="t-k" hidden>
+    <div class="card">
+      <h3>📦 নতুন স্টক পণ্য যোগ করুন (মগ, PVC কার্ড, ফটো পেপার, ফ্রেম ইত্যাদি)</h3>
+      <div class="g">
+        <div>
+          <label>পণ্যের নাম *</label>
+          <input id="sn" placeholder="যেমন: ম্যাজিক মগ">
+        </div>
+        <div>
+          <label>প্রাথমিক মজুত পরিমাণ</label>
+          <input type="number" id="sq" placeholder="0">
+        </div>
+        <div>
+          <label>ক্রয় মূল্য (একক) ৳</label>
+          <input type="number" id="sb" placeholder="0">
+        </div>
+        <div>
+          <label>বিক্রয় মূল্য (একক) ৳</label>
+          <input type="number" id="ss" placeholder="0">
+        </div>
+      </div>
+      <div class="row">
+        <button class="bg" id="sadd">➕ স্টকে যোগ করুন</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>বর্তমান স্টক তালিকা</h3>
+        <span id="kv" style="font-size:13.5px"></span>
+      </div>
+      <div class="tw">
+        <table>
+          <thead>
+            <tr>
+              <th>পণ্য</th>
+              <th>মজুত</th>
+              <th>ক্রয় দর</th>
+              <th>বিক্রয় দর</th>
+              <th>মোট ক্রয়মূল্য</th>
+              <th>অ্যাকশন</th>
+            </tr>
+          </thead>
+          <tbody id="kt"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB: JOB RATES (separate from stock) -->
+  <section id="t-x" hidden>
+    <div class="card">
+      <h3>🏷️ নতুন কাজ যোগ করুন (বিক্রয় রেট ও ক্রয়মূল্য / উৎপাদন খরচ)</h3>
+      <div class="g">
+        <div><label>কাজের নাম *</label><input id="rn" placeholder="যেমন: ফটোকপি (A4)"></div>
+        <div><label>ক্যাটাগরি (ঐচ্ছিক)</label><input id="rc" placeholder="যেমন: ফটোকপি ও প্রিন্ট"></div>
+        <div><label>বিক্রয় রেট (৳)</label><input type="number" id="rs_" placeholder="0"></div>
+        <div><label>ক্রয়মূল্য / খরচ (৳)</label><input type="number" id="rb_" placeholder="0"></div>
+      </div>
+      <div class="row"><button class="bg" id="radd">➕ কাজ যোগ করুন</button></div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <h3>কাজের রেট তালিকা</h3>
+        <input id="rq" placeholder="🔍 কাজ খুঁজুন" style="max-width:220px">
+      </div>
+      <small style="color:var(--mut)">রেট বা খরচ বদলালে নিজে থেকেই সেভ হবে। খরচ কাস্টমারের ভাউচারে দেখা যায় না।</small>
+      <div class="tw" style="margin-top:8px">
+        <table>
+          <thead><tr><th>কাজ</th><th>বিক্রয় ৳</th><th>খরচ ৳</th><th>লাভ ৳</th><th>অ্যাকশন</th></tr></thead>
+          <tbody id="rtb"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 5: ADVANCED DASHBOARD & REPORTS -->
+  <section id="t-r" hidden>
+    <div class="card">
+      <div class="g4" style="align-items:end">
+        <div>
+          <label>সময়কাল নির্বাচন</label>
+          <select id="rperiod">
+            <option value="today">আজকের হিসাব (Today)</option>
+            <option value="7">শেষ ৭ দিন (7 Days)</option>
+            <option value="30">শেষ ৩০ দিন (30 Days)</option>
+            <option value="month" selected>চলতি মাস (This Month)</option>
+            <option value="all">সর্বমোট (All Time)</option>
+            <option value="custom">কাস্টম তারিখ (Custom)</option>
+          </select>
+        </div>
+        <div id="rfromBox" style="display:none">
+          <label>শুরুর তারিখ</label>
+          <input type="date" id="rfrom">
+        </div>
+        <div id="rtoBox" style="display:none">
+          <label>শেষ তারিখ</label>
+          <input type="date" id="rto">
+        </div>
+      </div>
+    </div>
+
+    <div class="stats" id="rs"></div>
+
+    <div class="card">
+      <div class="card-head">
+        <h3>📈 দৈনিক মোট আয়, ব্যয় ও লাভের গ্রাফ</h3>
+        <small style="color:var(--mut)">নীল: মোট আয় · লাল: মোট ব্যয় ও পণ্য খরচ · সবুজ: নিট লাভ</small>
+      </div>
+      <div class="chart-box">
+        <canvas id="salesChart"></canvas>
+      </div>
+    </div>
+
+    <div class="g">
+      <div class="card">
+        <h3>🏆 সেরা সেবা ও পণ্য (ভাউচার + নগদ আয়)</h3>
+        <div class="tw">
+          <table style="min-width:320px">
+            <thead>
+              <tr>
+                <th>সেবা / পণ্যের নাম</th>
+                <th>সংখ্যা/পরিমাণ</th>
+                <th>মোট আয়</th>
+              </tr>
+            </thead>
+            <tbody id="topItems"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📅 দিনভিত্তিক বিস্তারিত হিসাব</h3>
+        <div class="tw">
+          <table style="min-width:620px">
+            <thead>
+              <tr>
+                <th>তারিখ</th>
+                <th>ভাউচার বিক্রয়</th>
+                <th>নগদ আয়</th>
+                <th>খরচের বিবরণ</th>
+                <th>মোট ব্যয়/খরচ</th>
+                <th>নিট লাভ</th>
+                <th>জমা (৳)</th>
+              </tr>
+            </thead>
+            <tbody id="rt"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 6: BACKUP & EXPORT -->
+  <section id="t-b" hidden>
+    <div class="card">
+      <h3>📁 ফাইল ব্যাকআপ ও এক্সপোর্ট (নিরাপদ সংরক্ষণ)</h3>
+      <p style="font-size:13.5px;color:var(--mut);margin-top:0">
+        ব্রাউজারের ক্যাশ ক্লিয়ার হলেও যেন আপনার হিসাব না হারায়, সেজন্য নিচের বাটন থেকে সরাসরি <b>JSON ব্যাকআপ ফাইল</b> ডাউনলোড করে Google Drive বা ফোনে সেভ রাখুন।
+      </p>
+      <div class="row">
+        <button class="bg" id="dlJson">⬇️ ব্যাকআপ ফাইল ডাউনলোড (.json)</button>
+        <button class="b2" id="ulJsonBtn">⬆️ ফাইল থেকে রিস্টোর (.json)</button>
+        <input type="file" id="ulJsonInput" accept=".json" hidden>
+      </div>
+      <div class="row">
+        <button class="bo" id="dlCsvSales">📊 ভাউচার বিক্রয় (Excel/CSV)</button>
+        <button class="bg" id="dlCsvQInc">⚡ দৈনিক নগদ আয় ও জমা (Excel/CSV)</button>
+        <button class="bmut" id="dlCsvExp">💸 দৈনিক খরচ (Excel/CSV)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📋 কুইক টেক্সট ব্যাকআপ কোড (WhatsApp / নোটের জন্য)</h3>
+      <textarea id="bk" rows="4" placeholder="ব্যাকআপ কোড এখানে দেখাবে / লোড করতে পেস্ট করুন"></textarea>
+      <div class="row">
+        <button class="bg" id="mk">📋 ব্যাকআপ কোড তৈরি ও কপি</button>
+        <button class="b2" id="ld">🔄 কোড থেকে ডাটা লোড</button>
+      </div>
+    </div>
+
+    <!-- Offline Queue & Cloud Sync Settings Card -->
+    <div class="card" id="cloudSyncCard" style="border-top: 4px solid var(--p2);">
+      <div class="card-head">
+        <h3>☁️ অফলাইন কিউ ও ক্লাউড সিঙ্ক সেটিংস (কম্পিউটার ↔ ফোন)</h3>
+        <span class="badge badge-b">Offline-First Ready</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--mut);margin-top:0">
+        ইন্টারনেট না থাকলেও আপনার সব ডাটা সাথে সাথে ব্রাউজারে সেভ হয় এবং পরিবর্তনগুলো <b>Sync Queue</b>-তে জমা থাকে। Google Apps Script বা Webhook URL যুক্ত করলে নেট এলে কম্পিউটার ও ফোনের মধ্যে ডাটা সিঙ্ক করা যাবে।
+      </p>
+
+      <div class="stats" id="syncQueueStats" style="margin-bottom:12px"></div>
+
+      <div class="g">
+        <div>
+          <label>Google Apps Script / Webhook URL (ঐচ্ছিক)</label>
+          <input id="syncWebhookUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+        </div>
+        <div>
+          <label>সিঙ্ক অপশন</label>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;padding-top:8px;font-size:13.5px">
+            <label style="margin:0;display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--tx)">
+              <input type="checkbox" id="autoSyncOnOnline" style="width:auto;margin:0"> নেট এলে অটো-সিঙ্ক চালু রাখুন
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <button type="button" class="bg" id="saveSyncCfgBtn">💾 সিঙ্ক সেটিংস সেভ</button>
+        <button type="button" class="b2" id="runSyncNowBtn">🔄 কিউ সিঙ্ক করুন (Push & Pull)</button>
+        <button type="button" class="bo" id="pullCloudBtn">⬇️ ক্লাউড থেকে ডাটা আনুন</button>
+        <button type="button" class="bmut" id="markSyncedBtn">✓ কিউ ক্লিয়ার / সিঙ্কড মার্ক</button>
+      </div>
+
+      <div style="margin-top:12px">
+        <label>অফলাইন পরিবর্তন কিউ (Pending Sync Queue)</label>
+        <div class="tw">
+          <table style="min-width:420px">
+            <thead>
+              <tr>
+                <th>সময়</th>
+                <th>ধরন</th>
+                <th>বিবরণ</th>
+                <th>অবস্থা</th>
+              </tr>
+            </thead>
+            <tbody id="syncQueueTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- VOUCHER PREVIEW & PRINT MODAL -->
+<div id="vch" class="modal">
+  <div class="bar">
+    <button class="b2" id="vModeA4">📄 A4 ভাউচার</button>
+    <button class="bo" id="vModePos">🧾 POS রসিদ (80mm)</button>
+    <button class="bwa" id="vWa">💬 WhatsApp পাঠান</button>
+    <button class="bg" id="vpr">🖨️ প্রিন্ট</button>
+    <button class="br" id="vcl">✖ বন্ধ</button>
+  </div>
+  <div id="vp"></div>
+</div>
+
+<!-- CUSTOM INPUT / CONFIRM DIALOG MODAL -->
+<div id="dlg" class="modal">
+  <div class="modal-box">
+    <h3 id="dlgTitle" style="margin-bottom:8px">নিশ্চিত করুন</h3>
+    <p id="dlgMsg" style="font-size:14px;color:var(--mut);margin:0 0 12px"></p>
+    <input id="dlgInput" style="display:none;margin-bottom:12px">
+    <div class="row" style="margin-top:0">
+      <button class="bg" id="dlgOk">ঠিক আছে</button>
+      <button class="bmut" id="dlgCancel">বাতিল</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ==========================================================================
+   1. BANGLADESH GEOGRAPHY DATA (8 DIVISIONS, 64 DISTRICTS, UPAZILAS, UNIONS, VILLAGES)
+   ========================================================================== */
+var BD_DIVISIONS = {
+  "খুলনা": ["যশোর", "খুলনা", "সাতক্ষীরা", "বাগেরহাট", "ঝিনাইদহ", "মাগুরা", "নড়াইল", "কুষ্টিয়া", "চুয়াডাঙ্গা", "মেহেরপুর"],
+  "ঢাকা": ["ঢাকা", "গাজীপুর", "নারায়ণগঞ্জ", "নরসিংদী", "মুন্সীগঞ্জ", "মানিকগঞ্জ", "টাঙ্গাইল", "কিশোরগঞ্জ", "ফরিদপুর", "গোপালগঞ্জ", "মাদারীপুর", "রাজবাড়ী", "শরীয়তপুর"],
+  "চট্টগ্রাম": ["চট্টগ্রাম", "কক্সবাজার", "কুমিল্লা", "ব্রাহ্মণবাড়িয়া", "চাঁদপুর", "নোয়াখালী", "ফেনী", "লক্ষ্মীপুর", "খাগড়াছড়ি", "রাঙ্গামাটি", "বান্দরবান"],
+  "রাজশাহী": ["রাজশাহী", "বগুড়া", "পাবনা", "সিরাজগঞ্জ", "নাটোর", "নওগাঁ", "চাঁপাইনবাবগঞ্জ", "জয়পুরহাট"],
+  "রংপুর": ["রংপুর", "দিনাজপুর", "কুড়িগ্রাম", "গাইবান্ধা", "নীলফামারী", "লালমনিরহাট", "ঠাকুরগাঁও", "পঞ্চগড়"],
+  "বরিশাল": ["বরিশাল", "পটুয়াখালী", "ভোলা", "পিরোজপুর", "বরগুনা", "ঝালকাঠি"],
+  "সিলেট": ["সিলেট", "মৌলভীবাজার", "হবিগঞ্জ", "সুনামগঞ্জ"],
+  "ময়মনসিংহ": ["ময়মনসিংহ", "জামালপুর", "নেত্রকোনা", "শেরপুর"]
+};
+
+var BD_UPAZILAS = {
+  "যশোর": ["বাঘারপাড়া", "যশোর সদর", "অভয়নগর", "কেশবপুর", "চৌগাছা", "ঝিকরগাছা", "মণিরামপুর", "শার্শা"],
+  "খুলনা": ["খুলনা সদর", "সোনাডাঙ্গা", "খালিশপুর", "দৌলতপুর", "খানজাহান আলী", "ডুমুরিয়া", "তেরখাদা", "দিঘলিয়া", "পাইকগাছা", "ফুলতলা", "বটিয়াঘাটা", "রূপসা", "কয়রা", "দাকোপ"],
+  "সাতক্ষীরা": ["সাতক্ষীরা সদর", "আশাশুনি", "কলারোয়া", "কালীগঞ্জ", "তালা", "দেবহাটা", "শ্যামনগর"],
+  "বাগেরহাট": ["বাগেরহাট সদর", "কচুয়া", "চিতলমারী", "ফকিরহাট", "মংলা", "মোরেলগঞ্জ", "মোল্লাহাট", "রামপাল", "শরণখোলা"],
+  "ঝিনাইদহ": ["ঝিনাইদহ সদর", "কালীগঞ্জ", "কোটচাঁদপুর", "মহেশপুর", "শৈলকুপা", "হরিণাকুণ্ডু"],
+  "মাগুরা": ["মাগুরা সদর", "মহম্মদপুর", "শালিখা", "শ্রীপুর"],
+  "নড়াইল": ["নড়াইল সদর", "কালিয়া", "লোহাগড়া"],
+  "কুষ্টিয়া": ["কুষ্টিয়া সদর", "কুমারখালী", "খোকসা", "দৌলতপুর", "ভেড়ামারা", "মিরপুর"],
+  "চুয়াডাঙ্গা": ["চুয়াডাঙ্গা সদর", "আলমডাঙ্গা", "জীবননগর", "দামুড়হুদা"],
+  "মেহেরপুর": ["মেহেরপুর সদর", "গাংনী", "মুজিবনগর"],
+  "ঢাকা": ["ধানমন্ডি", "গুলশান", "উত্তরা", "মিরপুর", "মোহাম্মদপুর", "তেজগাঁও", "রমনা", "মতিঝিল", "সাভার", "ধামরাই", "কেরানীগঞ্জ", "দোহার", "নবাবগঞ্জ"],
+  "গাজীপুর": ["গাজীপুর সদর", "কালিয়াকৈর", "কালীগঞ্জ", "কাপাসিয়া", "শ্রীপুর", "টঙ্গী"],
+  "নারায়ণগঞ্জ": ["নারায়ণগঞ্জ সদর", "আড়াইহাজার", "বন্দর", "রূপগঞ্জ", "সোনারগাঁও"],
+  "চট্টগ্রাম": ["কোতোয়ালী", "পাঁচলাইশ", "পাহাড়তলী", "হালিশহর", "পটিয়া", "সীতাকুণ্ড", "মিরসরাই", "হাটহাজারী", "রাউজান", "রাঙ্গুনিয়া", "বোয়ালখালী", "আনোয়ারা", "চন্দনাইশ", "সাতকানিয়া", "লোহাগাড়া", "বাঁশখালী", "সন্দ্বীপ", "ফটিকছড়ি"],
+  "কক্সবাজার": ["কক্সবাজার সদর", "চকরিয়া", "টেকনাফ", "উখিয়া", "মহেশখালী", "রামু", "কুতুবদিয়া", "পেকুয়া"],
+  "কুমিল্লা": ["কুমিল্লা আদর্শ সদর", "সদর দক্ষিণ", "লাকসাম", "চৌদ্দগ্রাম", "দাউদকান্দি", "দেবিদ্বার", "বুড়িচং", "ব্রাহ্মণপাড়া", "মুরাদনগর", "হোমনা", "মেঘনা", "তিতাস", "মনোহরগঞ্জ", "নাঙ্গলকোট", "বরুড়া", "চান্দিনা"],
+  "রাজশাহী": ["বোয়ালিয়া", "মতিহার", "রাজপাড়া", "শাহমখদুম", "পবা", "গোদাগাড়ী", "তানোর", "মোহনপুর", "বাগমারা", "দুর্গাপুর", "পুঠিয়া", "চারঘাট", "বাঘা"],
+  "বগুড়া": ["বগুড়া সদর", "শাজাহানপুর", "শেরপুর", "ধুনট", "সারিয়াকান্দি", "গাবতলী", "সোনাতলা", "শিবগঞ্জ", "কাহালু", "দুপচাঁচিয়া", "আদমদীঘি", "নন্দীগ্রাম"],
+  "রংপুর": ["রংপুর সদর", "গঙ্গাচড়া", "তারাগঞ্জ", "বদরগঞ্জ", "মিঠাপুকুর", "পীরগঞ্জ", "পীরগাছা", "কাউনিয়া"],
+  "বরিশাল": ["বরিশাল সদর", "বাকেরগঞ্জ", "বাবুগঞ্জ", "উজিরপুর", "বানারীপাড়া", "গৌরনদী", "আগৈলঝাড়া", "মুলাদী", "হিজলা", "মেহেন্দিগঞ্জ"],
+  "সিলেট": ["সিলেট সদর", "দক্ষিণ সুরমা", "বিশ্বনাথ", "ওসমানীনগর", "বালাগঞ্জ", "ফেঞ্চুগঞ্জ", "গোলাপগঞ্জ", "বিয়ানীবাজার", "কানাইঘাট", "জৈন্তাপুর", "গোয়াইনঘাট", "কোম্পানীগঞ্জ", "জকিগঞ্জ"],
+  "ময়মনসিংহ": ["ময়মনসিংহ সদর", "ত্রিশাল", "ভালুকা", "গফরগাঁও", "নান্দাইল", "ঈশ্বরগঞ্জ", "গৌরীপুর", "ফুলপুর", "তারাকান্দা", "হালুয়াঘাট", "ধোবাউড়া", "মুক্তাগাছা", "ফুলবাড়ীয়া"]
+};
+
+// Unions & Pourashava under Bagherpara and neighboring Upazilas
+var BD_UNIONS = {
+  "বাঘারপাড়া": ["ধলগ্রাম", "জহুরপুর", "বন্দবিলা", "রায়পুর", "নারিকেলবাড়িয়া", "দরাজহাট", "জামদিয়া", "বাসুয়াড়ী", "দোহাকুলা", "বাঘারপাড়া পৌরসভা"],
+  "যশোর সদর": ["যশোর পৌরসভা", "হৈবতপুর", "লেবুতলা", "ইছালী", "নওয়াপাড়া", "উপশহর", "কাশিমপুর", "চুড়ামনকাটি", "দেয়াড়া", "আরবপুর", "চাঁচড়া", "রামনগর", "ফতেপুর", "কচুয়া", "নরেন্দ্রপুর", "বসুন্দিয়া"],
+  "শালিখা": ["ধনেশ্বরগাতী", "তালখড়ি", "আড়পাড়া", "শতখালী", "শালিখা", "বুনাগাতী", "গঙ্গারামপুর"],
+  "নড়াইল সদর": ["নড়াইল পৌরসভা", "মাইজপাড়া", "হবখালী", "চণ্ডীবরপুর", "আউড়িয়া", "বাঁশগ্রাম", "ভদ্রবিলা", "সিংগাশোলপুর", "কলোড়া", "বিছালী", "তুলারামপুর", "শেখহাটি", "মুলিয়া"]
+};
+
+// Villages under Bagherpara Unions (especially Dhalgram & surrounding areas)
+var BD_VILLAGES = {
+  "ধলগ্রাম": ["ধলগ্রাম", "ধলগ্রাম বাজার", "আন্দুলবাড়িয়া", "মানিকদিহি", "গাইদঘাট", "বলরামপুর", "সিলুমপুর", "বেতালপাড়া", "দত্তপাড়া", "পাইকপাড়া", "চণ্ডীপুর", "রঘুনাথপুর", "আগড়া", "নতুনগ্রাম", "মাঠপাড়া"],
+  "জহুরপুর": ["জহুরপুর", "বেতালপাড়া", "হলদা", "পুকুরিয়া", "ভাটপাড়া", "বাকড়ী", "কয়ালখালী", "রাজাপুর"],
+  "বন্দবিলা": ["বন্দবিলা", "খাজুরা", "খাজুরা বাজার", "মথুরাপুর", "সাদীপুর", "তেলকুপ", "গয়েশপুর", "মির্জাপুর"],
+  "রায়পুর": ["রায়পুর", "তুলারামপুর", "কাজীরহাট", "ভাতুড়িয়া", "কানাইডাঙ্গা", "রামকৃষ্ণপুর"],
+  "নারিকেলবাড়িয়া": ["নারিকেলবাড়িয়া", "ইন্দ্রা", "চাঁদপুর", "বড়খুদরা", "ক্ষুদেরা", "দক্ষিণপাড়া"],
+  "দরাজহাট": ["দরাজহাট", "হাবুল্যা", "ছোট খুদরা", "বলরামপুর", "রামনগর", "কালীগঞ্জ"],
+  "জামদিয়া": ["জামদিয়া", "ভিটাবল্যা", "চারাবটতলা", "কড়ইতলা", "দোহাকুলা"],
+  "বাসুয়াড়ী": ["বাসুয়াড়ী", "মোহাম্মদপুর", "গোপীনাথপুর", "চাঁদপুর", "শিবপুর"],
+  "দোহাকুলা": ["দোহাকুলা", "বোয়ালিয়া", "কানাইপুর", "ছাতড়া", "রামচন্দ্রপুর"],
+  "বাঘারপাড়া পৌরসভা": ["বাঘারপাড়া বাজার", "মহিরন", "কলেজপাড়া", "থানাপাড়া", "পালপাড়া", "মোল্লাপাড়া"]
+};
+
+/* ==========================================================================
+   2. SERVICE CATALOG & INITIAL DATA
+   ========================================================================== */
+var D = [
+  ["ফটোগ্রাফি ও ভিডিওগ্রাফি", ["ডিজিটাল ফটোগ্রাফি","ভিডিওগ্রাফি","পাসপোর্ট সাইজ ছবি","স্ট্যাম্প সাইজ ছবি","ছবি থেকে ছবি তৈরি","ছবি প্রিন্ট","ছবির অ্যালবাম তৈরি","ছবি ফ্রেমিং","ছবি এডিটিং ও রিটাচিং"]],
+  ["ডিজিটাল প্রিন্টিং", ["কালার প্রিন্ট","সাদা-কালো প্রিন্ট","ল্যাব প্রিন্ট","ফটোকপি","স্ক্যানিং","লেমিনেশন","PVC / প্লাস্টিক কার্ড প্রিন্ট","ব্যানার প্রিন্ট","পোস্টার প্রিন্ট"]],
+  ["কাস্টম গিফট ও পোশাক প্রিন্ট", ["মগ প্রিন্ট","ক্যাপ প্রিন্ট","টি-শার্ট প্রিন্ট","জার্সি প্রিন্ট","কাস্টম ডিজাইন প্রিন্ট","ফটো গিফট আইটেম"]],
+  ["গ্রাফিক্স ডিজাইন", ["ব্যানার ডিজাইন","পোস্টার ডিজাইন","ভিজিটিং কার্ড ডিজাইন","লোগো ডিজাইন","জন্মদিনের ব্যানার ডিজাইন","বিয়ে/দাওয়াত কার্ড ডিজাইন","অনুষ্ঠানের ডিজাইন","কাস্টম ডিজাইন"]],
+  ["অনলাইন আবেদন ও সরকারি সেবা", ["নতুন NID আবেদন","NID সংশোধন","NID ডাউনলোড","NID প্রিন্ট","নতুন পাসপোর্ট আবেদন","ড্রাইভিং লাইসেন্স আবেদন","পুলিশ ক্লিয়ারেন্স আবেদন","পল্লী বিদ্যুৎ মিটার আবেদন","অন্যান্য অনলাইন আবেদন","ই-মেইল সংক্রান্ত কাজ"]],
+  ["শিক্ষা ও চাকরির আবেদন", ["স্কুল ভর্তি আবেদন","কলেজ ভর্তি আবেদন","বিশ্ববিদ্যালয় ভর্তি আবেদন","নার্সিং ভর্তি আবেদন","চাকরির আবেদন","পরীক্ষার আবেদন","অন্যান্য শিক্ষা আবেদন"]],
+  ["কম্পোজ ও ডকুমেন্ট", ["বাংলা কম্পোজ","ইংরেজি কম্পোজ","আরবি কম্পোজ","CV / বায়োডাটা","আবেদনপত্র তৈরি","ডকুমেন্ট টাইপিং","ডকুমেন্ট স্ক্যান ও প্রিন্ট"]],
+  ["টিকিট ও অন্যান্য অনলাইন সেবা", ["ট্রেনের টিকিট বুকিং","অনলাইন ফর্ম পূরণ","ই-মেইল তৈরি ও পরিচালনা","অনলাইন রেজিস্ট্রেশন","অনলাইন ডকুমেন্ট ডাউনলোড","অন্যান্য অনলাইন সেবা"]]
+];
+
+var K = "tisha_v3", OLD_K = "tisha_v2";
+var DB = {
+  stock: [],
+  sales: [],
+  exp: [],
+  qinc: [],
+  deposits: [],
+  seq: 0,
+  nov2026Seeded: false,
+  customGeo: { upz: {}, uni: {}, vil: {} },
+  sync: {
+    webhookUrl: "",
+    autoSync: true,
+    lastSyncedAt: "",
+    queue: []
+  }
+};
+var cart = [], editingSaleId = null, activeVoucherId = null, printMode = "a4", isSyncingNow = false;
+
+// Load data & auto-migrate from v2 if present
+try {
+  var rw = localStorage.getItem(K);
+  if (rw) {
+    DB = JSON.parse(rw);
+  } else {
+    var oldRw = localStorage.getItem(OLD_K);
+    if (oldRw) {
+      DB = JSON.parse(oldRw);
+      localStorage.setItem(K, JSON.stringify(DB));
+    }
+  }
+} catch (e) {}
+if (!Array.isArray(DB.qinc)) DB.qinc = [];
+if (!Array.isArray(DB.deposits)) DB.deposits = [];
+if (!Array.isArray(DB.sales)) DB.sales = [];
+if (!Array.isArray(DB.stock)) DB.stock = [];
+if (!Array.isArray(DB.exp)) DB.exp = [];
+function ensureRates() {
+  if (Array.isArray(DB.rates)) return;
+  DB.rates = [];
+  var id = 1;
+  D.forEach(function(c) { c[1].forEach(function(x) { DB.rates.push({ id: id++, n: x, cat: c[0], s: 0, c: 0 }); }); });
+}
+function rateById(id) { return (DB.rates || []).find(function(x) { return x.id === id; }); }
+if (!DB.customGeo) DB.customGeo = { upz: {}, uni: {}, vil: {} };
+if (!DB.customGeo.upz) DB.customGeo.upz = {};
+if (!DB.customGeo.uni) DB.customGeo.uni = {};
+if (!DB.customGeo.vil) DB.customGeo.vil = {};
+if (!DB.sync || typeof DB.sync !== "object") {
+  DB.sync = { webhookUrl: "", autoSync: true, lastSyncedAt: "", queue: [] };
+}
+if (!Array.isArray(DB.sync.queue)) DB.sync.queue = [];
+if (typeof DB.sync.autoSync !== "boolean") DB.sync.autoSync = true;
+
+// One-time safe seed for Nov 1 - Nov 25, 2026 (preserves any existing stock/vouchers)
+function seedNov2026IfNeeded() {
+  if (DB.nov2026Seeded) return;
+  var novRows = [
+    { d: "2026-11-01", inc: 1700, work: "ফটোকপি, পাসপোর্ট ছবি ও প্রিন্ট", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 1400 },
+    { d: "2026-11-02", inc: 900,  work: "কম্পোজ, প্রিন্ট ও ফটোকপি", cust: "সকল কাস্টমার / নগদ", exp: 1718, cat: "বিদ্যুৎ বিল", expDesc: "biddut bil", dep: 650 },
+    { d: "2026-11-03", inc: 900,  work: "পাসপোর্ট ছবি ও লেমিনেশন", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 600 },
+    { d: "2026-11-04", inc: 200,  work: "ফটোকপি ও স্ক্যানিং", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 0 },
+    { d: "2026-11-05", inc: 1600, work: "ডিজিটাল ফটোগ্রাফি, ছবি প্রিন্ট ও ফটোকপি", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 1400 },
+    { d: "2026-11-06", inc: 0,    work: "", cust: "", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 0 },
+    { d: "2026-11-07", inc: 950,  work: "ফটোকপি ও কম্পোজ", cust: "সকল কাস্টমার / নগদ", exp: 50, cat: "অন্যান্য খরচ", expDesc: "দৈনিক খুচরা খরচ", dep: 700 },
+    { d: "2026-11-08", inc: 950,  work: "অনলাইন আবেদন ও প্রিন্ট", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 750 },
+    { d: "2026-11-09", inc: 800,  work: "পাসপোর্ট ছবি ও ফটোকপি", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 600 },
+    { d: "2026-11-10", inc: 2200, work: "ছবি প্রিন্ট, ফ্রেমিং ও অনলাইন কাজ", cust: "সকল কাস্টমার / নগদ", exp: 500, cat: "ইন্টারনেট ও মোবাইল", expDesc: "wifi", dep: 1500 },
+    { d: "2026-11-11", inc: 1300, work: "ফটোকপি, প্রিন্ট ও লেমিনেশন", cust: "সকল কাস্টমার / নগদ", exp: 80, cat: "অন্যান্য খরচ", expDesc: "চা-নাস্তা ও খুচরা খরচ", dep: 1000 },
+    { d: "2026-11-12", inc: 2100, work: "স্টুডিও ফটোগ্রাফি ও প্রিন্ট", cust: "সকল কাস্টমার / নগদ", exp: 500, cat: "দোকান ভাড়া", expDesc: "ghor vara", dep: 1400 },
+    { d: "2026-11-13", inc: 500,  work: "ফটোকপি ও প্রিন্ট", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 400 },
+    { d: "2026-11-14", inc: 1050, work: "পাসপোর্ট ছবি ও কম্পোজ", cust: "সকল কাস্টমার / নগদ", exp: 70, cat: "অন্যান্য খরচ", expDesc: "দৈনিক খুচরা খরচ", dep: 850 },
+    { d: "2026-11-15", inc: 2050, work: "অনলাইন আবেদন, ছবি ও প্রিন্ট", cust: "সকল কাস্টমার / নগদ", exp: 220, cat: "কালি ও পেপার", expDesc: "কাগজ ও খুচরা খরচ", dep: 1600 },
+    { d: "2026-11-16", inc: 1750, work: "ফটোকপি, প্রিন্ট ও লেমিনেশন", cust: "সকল কাস্টমার / নগদ", exp: 100, cat: "অন্যান্য খরচ", expDesc: "দৈনিক খুচরা খরচ", dep: 1400 },
+    { d: "2026-11-17", inc: 1350, work: "পাসপোর্ট ছবি ও ফটোকপি", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 1000 },
+    { d: "2026-11-18", inc: 1450, work: "ডিজাইন, প্রিন্ট ও ফটোকপি", cust: "সকল কাস্টমার / নগদ", exp: 570, cat: "দোকান ভাড়া", expDesc: "gor vara+dd", dep: 800 },
+    { d: "2026-11-19", inc: 400,  work: "ফটোকপি ও স্ক্যানিং", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 300 },
+    { d: "2026-11-20", inc: 0,    work: "", cust: "", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 0 },
+    { d: "2026-11-21", inc: 850,  work: "পাসপোর্ট ছবি ও ফটোকপি", cust: "সকল কাস্টমার / নগদ", exp: 90, cat: "অন্যান্য খরচ", expDesc: "দৈনিক খুচরা খরচ", dep: 600 },
+    { d: "2026-11-22", inc: 800,  work: "ফটোকপি ও অনলাইন আবেদন", cust: "সকল কাস্টমার / নগদ", exp: 170, cat: "অন্যান্য খরচ", expDesc: "দৈনিক খুচরা খরচ", dep: 500 },
+    { d: "2026-11-23", inc: 1800, work: "স্টুডিও ফটোগ্রাফি, ছবি ও প্রিন্ট", cust: "সকল কাস্টমার / নগদ", exp: 500, cat: "দোকান ভাড়া", expDesc: "ghor vara", dep: 1100 },
+    { d: "2026-11-24", inc: 1650, work: "কম্পোজ, প্রিন্ট ও ফটোকপি", cust: "সকল কাস্টমার / নগদ", exp: 170, cat: "অন্যান্য খরচ", expDesc: "দৈনিক খুচরা খরচ", dep: 1200 },
+    { d: "2026-11-25", inc: 1550, work: "পাসপোর্ট ছবি, লেমিনেশন ও প্রিন্ট", cust: "সকল কাস্টমার / নগদ", exp: 0, cat: "অন্যান্য খরচ", expDesc: "", dep: 1200 }
+  ];
+
+  novRows.forEach(function(r, idx) {
+    var baseId = 1761955200000 + idx * 1000;
+    if (r.inc > 0 && !DB.qinc.some(function(x) { return x.d === r.d; })) {
+      DB.qinc.push({
+        id: baseId + 1,
+        d: r.d,
+        t: r.work,
+        note: r.cust,
+        a: r.inc,
+        dep: r.dep
+      });
+    }
+    if (r.exp > 0 && !DB.exp.some(function(x) { return x.d === r.d; })) {
+      DB.exp.push({
+        id: baseId + 2,
+        d: r.d,
+        cat: r.cat,
+        t: r.expDesc,
+        a: r.exp
+      });
+    }
+    if (r.dep > 0 && !DB.deposits.some(function(x) { return x.d === r.d; })) {
+      DB.deposits.push({
+        id: baseId + 3,
+        d: r.d,
+        a: r.dep,
+        note: "প্রতিদিনের জমা"
+      });
+    }
+  });
+  DB.nov2026Seeded = true;
+  try { localStorage.setItem(K, JSON.stringify(DB)); } catch (e) {}
+}
+seedNov2026IfNeeded();
+
+function $(i) { return document.getElementById(i); }
+function sv(skipQueue, actionLabel, detailLabel) {
+  try {
+    if (!skipQueue && actionLabel) {
+      DB.sync.queue.push({
+        id: Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+        ts: new Date().toISOString(),
+        action: actionLabel,
+        detail: detailLabel || "স্থানীয় পরিবর্তন",
+        status: navigator.onLine ? "pending_push" : "queued_offline"
+      });
+      if (DB.sync.queue.length > 200) {
+        DB.sync.queue = DB.sync.queue.slice(-200);
+      }
+    }
+    localStorage.setItem(K, JSON.stringify(DB));
+  } catch (e) {}
+  updateSyncUI();
+}
+function n(v) { return parseFloat(v) || 0; }
+function f(v) { return (Math.round(v * 100) / 100).toString(); }
+function p2(x) { return (x < 10 ? "0" : "") + x; }
+function ds(d) { return d.getFullYear() + "-" + p2(d.getMonth() + 1) + "-" + p2(d.getDate()); }
+function fd(s) { if (!s) return ""; var a = s.split("-"); return a.length === 3 ? a[2] + "/" + a[1] + "/" + a[0] : s; }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function(c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function stk(id) { return DB.stock.find(function(x) { return x.id === id; }); }
+
+/* ==========================================================================
+   3. CASCADING ADDRESS SELECTOR LOGIC
+   ========================================================================== */
+function uniqueMerge(arr1, arr2) {
+  var set = {};
+  (arr1 || []).forEach(function(item) { if (item) set[item.trim()] = true; });
+  (arr2 || []).forEach(function(item) { if (item) set[item.trim()] = true; });
+  return Object.keys(set);
+}
+
+function initAddressDivisions() {
+  var divs = Object.keys(BD_DIVISIONS);
+  $("addrDiv").innerHTML = "<option value=''>-- বিভাগ নির্বাচন --</option>" +
+    divs.map(function(d) { return "<option value='" + esc(d) + "'>" + esc(d) + "</option>"; }).join("");
+}
+
+function onDivisionChange(keepChildren) {
+  var div = $("addrDiv").value;
+  var dists = BD_DIVISIONS[div] || [];
+  $("addrDist").innerHTML = "<option value=''>-- জেলা নির্বাচন --</option>" +
+    dists.map(function(d) { return "<option value='" + esc(d) + "'>" + esc(d) + "</option>"; }).join("");
+  if (!keepChildren) {
+    $("addrUpz").value = "";
+    $("addrUni").value = "";
+    $("addrVil").value = "";
+    onDistrictChange(false);
+  }
+  updateAddressPreview();
+}
+
+function onDistrictChange(keepChildren) {
+  var dist = $("addrDist").value;
+  var list = uniqueMerge(BD_UPAZILAS[dist], DB.customGeo.upz[dist]);
+  $("upzList").innerHTML = list.map(function(u) { return "<option value='" + esc(u) + "'>"; }).join("");
+  if (!keepChildren) {
+    $("addrUpz").value = "";
+    $("addrUni").value = "";
+    $("addrVil").value = "";
+    onUpazilaChange(false);
+  }
+  updateAddressPreview();
+}
+
+function onUpazilaChange(keepChildren) {
+  var upz = $("addrUpz").value.trim();
+  var list = uniqueMerge(BD_UNIONS[upz], DB.customGeo.uni[upz]);
+  $("uniList").innerHTML = list.map(function(u) { return "<option value='" + esc(u) + "'>"; }).join("");
+  if (!keepChildren) {
+    $("addrUni").value = "";
+    $("addrVil").value = "";
+    onUnionChange(false);
+  }
+  updateAddressPreview();
+}
+
+function onUnionChange(keepChildren) {
+  var uni = $("addrUni").value.trim();
+  var list = uniqueMerge(BD_VILLAGES[uni], DB.customGeo.vil[uni]);
+  $("vilList").innerHTML = list.map(function(v) { return "<option value='" + esc(v) + "'>"; }).join("");
+  if (!keepChildren) {
+    $("addrVil").value = "";
+  }
+  updateAddressPreview();
+}
+
+function getFormattedAddress() {
+  if ($("manualAddrToggle").checked) {
+    return $("ca").value.trim();
+  }
+  var parts = [];
+  var vil = $("addrVil").value.trim();
+  var uni = $("addrUni").value.trim();
+  var upz = $("addrUpz").value.trim();
+  var dist = $("addrDist").value.trim();
+  var div = $("addrDiv").value.trim();
+
+  if (vil) parts.push("গ্রাম: " + vil);
+  if (uni) parts.push("ইউনিয়ন: " + uni);
+  if (upz) parts.push("উপজেলা: " + upz);
+  if (dist) parts.push("জেলা: " + dist);
+  if (div) parts.push("বিভাগ: " + div);
+  return parts.join(", ");
+}
+
+function updateAddressPreview() {
+  var full = getFormattedAddress();
+  $("addrPreviewText").textContent = "পূর্ণ ঠিকানা: " + (full || "—");
+  if (!$("manualAddrToggle").checked) {
+    $("ca").value = full;
+  }
+}
+
+function setDefaultLocalAddress() {
+  $("manualAddrToggle").checked = false;
+  $("manualAddrWrap").style.display = "none";
+  $("addrDiv").value = "খুলনা";
+  onDivisionChange(true);
+  $("addrDist").value = "যশোর";
+  onDistrictChange(true);
+  $("addrUpz").value = "বাঘারপাড়া";
+  onUpazilaChange(true);
+  $("addrUni").value = "ধলগ্রাম";
+  onUnionChange(true);
+  $("addrVil").value = "";
+  updateAddressPreview();
+}
+
+function clearAddressFields() {
+  $("manualAddrToggle").checked = false;
+  $("manualAddrWrap").style.display = "none";
+  $("addrDiv").value = "";
+  onDivisionChange(false);
+  $("ca").value = "";
+  updateAddressPreview();
+}
+
+function saveCustomAddressTerms() {
+  var dist = $("addrDist").value.trim();
+  var upz = $("addrUpz").value.trim();
+  var uni = $("addrUni").value.trim();
+  var vil = $("addrVil").value.trim();
+
+  if (dist && upz && !(BD_UPAZILAS[dist] || []).includes(upz)) {
+    if (!DB.customGeo.upz[dist]) DB.customGeo.upz[dist] = [];
+    if (!DB.customGeo.upz[dist].includes(upz)) DB.customGeo.upz[dist].push(upz);
+  }
+  if (upz && uni && !(BD_UNIONS[upz] || []).includes(uni)) {
+    if (!DB.customGeo.uni[upz]) DB.customGeo.uni[upz] = [];
+    if (!DB.customGeo.uni[upz].includes(uni)) DB.customGeo.uni[upz].push(uni);
+  }
+  if (uni && vil && !(BD_VILLAGES[uni] || []).includes(vil)) {
+    if (!DB.customGeo.vil[uni]) DB.customGeo.vil[uni] = [];
+    if (!DB.customGeo.vil[uni].includes(vil)) DB.customGeo.vil[uni].push(vil);
+  }
+}
+
+$("addrDiv").onchange = function() { onDivisionChange(false); };
+$("addrDist").onchange = function() { onDistrictChange(false); };
+$("addrUpz").oninput = $("addrUpz").onchange = function() { onUpazilaChange(false); };
+$("addrUni").oninput = $("addrUni").onchange = function() { onUnionChange(false); };
+$("addrVil").oninput = $("addrVil").onchange = updateAddressPreview;
+$("ca").oninput = updateAddressPreview;
+$("resetLocalAddrBtn").onclick = setDefaultLocalAddress;
+$("clearAddrBtn").onclick = clearAddressFields;
+$("manualAddrToggle").onchange = function() {
+  var isManual = $("manualAddrToggle").checked;
+  $("manualAddrWrap").style.display = isManual ? "block" : "none";
+  if (isManual) $("ca").focus();
+  updateAddressPreview();
+};
+
+initAddressDivisions();
+setDefaultLocalAddress();
+
+/* ==========================================================================
+   4. UI HELPERS (TOAST, CUSTOM DIALOG, THEME)
+   ========================================================================== */
+var toastTimer;
+function toast(msg) {
+  var t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove("show"); }, 2600);
+}
+
+function customDialog(opts) {
+  return new Promise(function(resolve) {
+    $("dlgTitle").textContent = opts.title || "তথ্য দিন";
+    $("dlgMsg").textContent = opts.msg || "";
+    var inp = $("dlgInput");
+    if (opts.input) {
+      inp.style.display = "block";
+      inp.type = opts.inputType || "text";
+      inp.value = opts.defaultValue || "";
+      setTimeout(function() { inp.focus(); inp.select(); }, 50);
+    } else {
+      inp.style.display = "none";
+    }
+    $("dlg").style.display = "block";
+    function cleanup(val) {
+      $("dlg").style.display = "none";
+      $("dlgOk").onclick = null;
+      $("dlgCancel").onclick = null;
+      resolve(val);
+    }
+    $("dlgOk").onclick = function() { cleanup(opts.input ? inp.value : true); };
+    $("dlgCancel").onclick = function() { cleanup(null); };
+  });
+}
+
+// Theme toggle
+var savedTheme = localStorage.getItem("tisha_theme");
+if (savedTheme) document.documentElement.setAttribute("data-theme", savedTheme);
+$("themeToggle").onclick = function() {
+  var cur = document.documentElement.getAttribute("data-theme");
+  var next = cur === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("tisha_theme", next);
+  if (!$("t-r").hidden) drawChart();
+};
+
+// Initialize Dates & Navigation Tabs
+var todayStrInit = ds(new Date());
+$("dt").value = $("edt").value = $("qidt").value = $("rto").value = todayStrInit;
+$("dfilterDate").value = "";
+var d30 = new Date(); d30.setDate(d30.getDate() - 29);
+$("rfrom").value = ds(d30);
+
+document.querySelectorAll(".tabs button").forEach(function(b) {
+  b.onclick = function() {
+    document.querySelectorAll(".tabs button").forEach(function(x) { x.classList.toggle("on", x === b); });
+    ["d", "s", "l", "c", "k", "x", "r", "b"].forEach(function(t) {
+      var el = $("t-" + t);
+      if (el) el.hidden = t !== b.dataset.t;
+    });
+    render();
+  };
+});
+
+// Quick Preset Chips Logic for Daily Income & Expense
+document.querySelectorAll("#incChips .chip").forEach(function(ch) {
+  ch.onclick = function() {
+    document.querySelectorAll("#incChips .chip").forEach(function(x) { x.classList.remove("active"); });
+    ch.classList.add("active");
+    $("qid").value = ch.dataset.val;
+    $("qia").focus();
+  };
+});
+
+document.querySelectorAll("#expChips .chip").forEach(function(ch) {
+  ch.onclick = function() {
+    document.querySelectorAll("#expChips .chip").forEach(function(x) { x.classList.remove("active"); });
+    ch.classList.add("active");
+    $("et").value = ch.dataset.val;
+    if (ch.dataset.cat) $("ecat").value = ch.dataset.cat;
+    $("ea").focus();
+  };
+});
+
+// Quick Income & Deposit Add Handler
+$("qiadd").onclick = function() {
+  var a = n($("qia").value);
+  var dep = n($("qidep").value);
+  var desc = $("qid").value.trim();
+  if (!desc && dep <= 0) return toast("⚠️ আয়ের বিবরণ লিখুন বা প্রিসেট বাছাই করুন");
+  if (a <= 0 && dep <= 0) return toast("⚠️ সঠিক টাকার পরিমাণ দিন");
+
+  var entryDate = $("qidt").value || ds(new Date());
+  var entryNote = $("qin").value.trim() || "সকল কাস্টমার / নগদ";
+
+  if (a > 0) {
+    DB.qinc.push({
+      id: Date.now(),
+      d: entryDate,
+      t: desc || "দৈনিক নগদ আয়",
+      note: entryNote,
+      a: a,
+      dep: dep
+    });
+  }
+  if (dep > 0) {
+    DB.deposits.push({
+      id: Date.now() + 1,
+      d: entryDate,
+      a: dep,
+      note: desc ? ("জমা (" + desc + ")") : "প্রতিদিনের জমা"
+    });
+  }
+
+  sv(false, "নগদ আয় ও জমা", (desc || "জমা") + " (আয়: " + f(a) + " ৳, জমা: " + f(dep) + " ৳)");
+  $("qia").value = "";
+  $("qidep").value = "";
+  $("qid").value = "";
+  $("qin").value = "";
+  document.querySelectorAll("#incChips .chip").forEach(function(x) { x.classList.remove("active"); });
+  render();
+  toast("✅ আয় " + f(a) + " ৳ ও জমা " + f(dep) + " ৳ যোগ হয়েছে");
+};
+
+$("qdepOnlyBtn").onclick = async function() {
+  var entryDate = $("qidt").value || ds(new Date());
+  var res = await customDialog({
+    title: "প্রতিদিনের জমা যোগ করুন (" + fd(entryDate) + ")",
+    msg: "আজ আপনি কত টাকা জমা করছেন? (টাকার পরিমাণ লিখুন)",
+    input: true,
+    inputType: "number",
+    defaultValue: $("qidep").value || ""
+  });
+  var dep = n(res);
+  if (dep > 0) {
+    DB.deposits.push({
+      id: Date.now(),
+      d: entryDate,
+      a: dep,
+      note: $("qin").value.trim() || "প্রতিদিনের জমা"
+    });
+    sv(false, "প্রতিদিনের জমা", fd(entryDate) + " (" + f(dep) + " ৳)");
+    $("qidep").value = "";
+    render();
+    toast("✅ " + f(dep) + " ৳ জমা সংরক্ষিত হয়েছে");
+  }
+};
+
+$("dShowAllBtn").onclick = function() {
+  $("dfilterDate").value = "";
+  render();
+};
+$("dfilterDate").onchange = $("dfilterType").onchange = render;
+
+/* ==========================================================================
+   5. OFFLINE PURE-JS QR CODE GENERATOR
+   ========================================================================== */
+function drawQRCode(canvas, text) {
+  var size = 25;
+  var ctx = canvas.getContext("2d");
+  var scale = Math.floor(canvas.width / (size + 2));
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  var grid = Array.from({ length: size }, function() { return Array(size).fill(0); });
+  var reserved = Array.from({ length: size }, function() { return Array(size).fill(false); });
+
+  function placeFinder(r, c) {
+    for (var dr = -1; dr <= 7; dr++) {
+      for (var dc = -1; dc <= 7; dc++) {
+        var rr = r + dr, cc = c + dc;
+        if (rr < 0 || rr >= size || cc < 0 || cc >= size) continue;
+        reserved[rr][cc] = true;
+        var inOuter = dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6;
+        var inInner = dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4;
+        var onBorder = dr === 0 || dr === 6 || dc === 0 || dc === 6;
+        grid[rr][cc] = (inOuter && (onBorder || inInner)) ? 1 : 0;
+      }
+    }
+  }
+  placeFinder(0, 0);
+  placeFinder(0, size - 7);
+  placeFinder(size - 7, 0);
+
+  for (var i = 8; i < size - 8; i++) {
+    reserved[6][i] = reserved[i][6] = true;
+    grid[6][i] = grid[i][6] = (i % 2 === 0) ? 1 : 0;
+  }
+
+  var bytes = unescape(encodeURIComponent(text));
+  var bits = [];
+  for (var j = 0; j < bytes.length; j++) {
+    var code = bytes.charCodeAt(j);
+    for (var b = 7; b >= 0; b--) bits.push((code >> b) & 1);
+  }
+  if (!bits.length) bits.push(1, 0, 1, 0);
+
+  var idx = 0;
+  for (var r = 0; r < size; r++) {
+    for (var c = 0; c < size; c++) {
+      if (!reserved[r][c]) {
+        var bit = bits[idx % bits.length];
+        grid[r][c] = ((r + c) % 2 === 0) ? (bit ^ 1) : bit;
+        idx++;
+      }
+    }
+  }
+
+  ctx.fillStyle = "#000000";
+  var offset = Math.floor((canvas.width - size * scale) / 2);
+  for (var r2 = 0; r2 < size; r2++) {
+    for (var c2 = 0; c2 < size; c2++) {
+      if (grid[r2][c2]) {
+        ctx.fillRect(offset + c2 * scale, offset + r2 * scale, scale, scale);
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   6. BILLING / CART & CUSTOMER AUTOFILL (WITH STRUCTURED ADDRESS)
+   ========================================================================== */
+function updateCustomerDatalist() {
+  var names = {}, phones = {};
+  DB.sales.forEach(function(s) {
+    if (s.c) names[s.c] = s;
+    if (s.p) phones[s.p] = s;
+  });
+  $("custNames").innerHTML = Object.keys(names).map(function(k) {
+    return "<option value='" + esc(k) + "'>" + esc(names[k].p || "") + "</option>";
+  }).join("");
+  $("custPhones").innerHTML = Object.keys(phones).map(function(k) {
+    return "<option value='" + esc(k) + "'>" + esc(phones[k].c || "") + "</option>";
+  }).join("");
+}
+
+function applySavedCustomerAddress(found) {
+  if (!found) return;
+  if (found.geo) {
+    $("manualAddrToggle").checked = false;
+    $("manualAddrWrap").style.display = "none";
+    $("addrDiv").value = found.geo.div || "";
+    onDivisionChange(true);
+    $("addrDist").value = found.geo.dist || "";
+    onDistrictChange(true);
+    $("addrUpz").value = found.geo.upz || "";
+    onUpazilaChange(true);
+    $("addrUni").value = found.geo.uni || "";
+    onUnionChange(true);
+    $("addrVil").value = found.geo.vil || "";
+    updateAddressPreview();
+  } else if (found.a) {
+    $("manualAddrToggle").checked = true;
+    $("manualAddrWrap").style.display = "block";
+    $("ca").value = found.a;
+    updateAddressPreview();
+  }
+}
+
+$("cn").onchange = function() {
+  var val = $("cn").value.trim();
+  var found = DB.sales.slice().reverse().find(function(s) { return s.c === val; });
+  if (found) {
+    if (!$("cp").value && found.p) $("cp").value = found.p;
+    applySavedCustomerAddress(found);
+  }
+};
+$("cp").onchange = function() {
+  var val = $("cp").value.trim();
+  var found = DB.sales.slice().reverse().find(function(s) { return s.p === val; });
+  if (found) {
+    if (!$("cn").value && found.c) $("cn").value = found.c;
+    applySavedCustomerAddress(found);
+  }
+};
+
+function selOpts() {
+  ensureRates();
+  var h = "";
+  if (DB.stock.length) {
+    h += "<optgroup label='📦 স্টক পণ্য'>" + DB.stock.map(function(s) {
+      return "<option value='s:" + s.id + "'>" + esc(s.n) + " (মজুত: " + s.q + ")</option>";
+    }).join("") + "</optgroup>";
+  }
+  var cats = {};
+  DB.rates.forEach(function(r) { var k = r.cat || "🏷️ কাজের রেট"; (cats[k] = cats[k] || []).push(r); });
+  Object.keys(cats).forEach(function(k) {
+    h += "<optgroup label='" + esc(k) + "'>" + cats[k].map(function(r) {
+      return "<option value='r:" + r.id + "'>" + esc(r.n) + (r.s ? " — " + f(r.s) + " ৳" : "") + "</option>";
+    }).join("") + "</optgroup>";
+  });
+  var old = $("isel").value;
+  $("isel").innerHTML = h;
+  if (old) $("isel").value = old;
+  pick();
+}
+
+function pick() {
+  var v = $("isel").value;
+  if (v && v.indexOf("s:") === 0) {
+    var s = stk(+v.slice(2));
+    $("ir").value = s ? s.s : "";
+  } else if (v && v.indexOf("r:") === 0) {
+    var rt = rateById(+v.slice(2));
+    $("ir").value = rt && rt.s ? rt.s : "";
+  } else {
+    $("ir").value = "";
+  }
+}
+$("isel").onchange = function() {
+  pick();
+  var v = $("isel").value;
+  if ($("autoAdd") && $("autoAdd").checked && v && n($("iq").value) > 0 && !$("icustom").value.trim()) {
+    if (n($("ir").value) > 0) $("iadd").click();
+    else toast("⚠️ এই কাজের রেট দেওয়া নেই, একক দাম লিখে যোগ করুন");
+  }
+};
+
+$("iadd").onclick = function() {
+  var customName = $("icustom").value.trim();
+  var v = $("isel").value;
+  var q = n($("iq").value);
+  var r = n($("ir").value);
+  if (q <= 0) return toast("⚠️ সঠিক পরিমাণ দিন");
+
+  var it = { q: q, r: r, b: 0 };
+  if (customName) {
+    it.n = customName;
+  } else if (v.indexOf("s:") === 0) {
+    var s = stk(+v.slice(2));
+    var used = cart.filter(function(c) { return c.sid === s.id; }).reduce(function(a, c) { return a + c.q; }, 0);
+    if (used + q > s.q) return toast("⚠️ স্টকে মাত্র " + (s.q - used) + " টি মজুত আছে");
+    it.n = s.n;
+    it.sid = s.id;
+    it.b = s.b;
+  } else if (v.indexOf("r:") === 0) {
+    var rt = rateById(+v.slice(2));
+    it.n = rt ? rt.n : "";
+    it.b = rt ? rt.c : 0;
+  } else {
+    it.n = v.slice(2);
+  }
+
+  cart.push(it);
+  $("iq").value = 1;
+  $("icustom").value = "";
+  renderCart();
+};
+
+function totals() {
+  var sub = cart.reduce(function(a, c) { return a + c.q * c.r; }, 0);
+  var dc = n($("dc").value);
+  var t = Math.max(0, sub - dc);
+  var pd = n($("pd").value);
+  return { sub: sub, dc: dc, t: t, pd: pd };
+}
+
+function renderCart() {
+  $("ct").innerHTML = cart.map(function(c, i) {
+    return "<tr><td>" + (i + 1) + "</td><td>" + esc(c.n) + (c.sid ? " <span class='badge badge-b'>স্টক</span>" : "") + "</td><td>" + c.q + "</td><td>" + f(c.r) + "</td><td>" + f(c.q * c.r) + "</td><td><button class='sm br' onclick='cart.splice(" + i + ",1);renderCart()'>✖</button></td></tr>";
+  }).join("") || "<tr><td colspan='6' style='text-align:center;color:var(--mut)'>কোনো আইটেম যোগ হয়নি</td></tr>";
+
+  var t = totals();
+  $("ctot").innerHTML = "সাব-টোটাল: " + f(t.sub) + " ৳ · ছাড়: " + f(t.dc) + " ৳ · <b>সর্বমোট: " + f(t.t) + " ৳</b> · বাকি: <b class='due'>" + f(Math.max(0, t.t - t.pd)) + " ৳</b>";
+}
+$("dc").oninput = $("pd").oninput = renderCart;
+
+$("fullPaidBtn").onclick = function() {
+  var t = totals();
+  $("pd").value = t.t;
+  renderCart();
+};
+
+function resetSaleForm() {
+  editingSaleId = null;
+  cart = [];
+  ["cn", "cp", "dc", "pd", "icustom"].forEach(function(i) { $(i).value = ""; });
+  setDefaultLocalAddress();
+  $("dt").value = ds(new Date());
+  $("saleFormTitle").textContent = "🧾 নতুন বিক্রয় / ভাউচার তৈরি";
+  $("save").textContent = "✅ সেভ করে ভাউচার দেখুন";
+  $("cancelEditBtn").style.display = "none";
+  renderCart();
+}
+$("cancelEditBtn").onclick = resetSaleForm;
+
+$("save").onclick = function() {
+  var c = $("cn").value.trim();
+  if (!c) return toast("⚠️ কাস্টমারের নাম লিখুন");
+  if (!cart.length) return toast("⚠️ কমপক্ষে একটি আইটেম যোগ করুন");
+
+  var t = totals();
+  var targetId;
+  var fullAddr = getFormattedAddress();
+  var geoObj = $("manualAddrToggle").checked ? null : {
+    div: $("addrDiv").value.trim(),
+    dist: $("addrDist").value.trim(),
+    upz: $("addrUpz").value.trim(),
+    uni: $("addrUni").value.trim(),
+    vil: $("addrVil").value.trim()
+  };
+
+  if (geoObj) saveCustomAddressTerms();
+
+  if (editingSaleId) {
+    var oldSale = DB.sales.find(function(x) { return x.id === editingSaleId; });
+    if (oldSale) {
+      oldSale.items.forEach(function(i) { if (i.sid) { var x = stk(i.sid); if (x) x.q += i.q; } });
+      oldSale.d = $("dt").value;
+      oldSale.c = c;
+      oldSale.p = $("cp").value.trim();
+      oldSale.a = fullAddr;
+      oldSale.geo = geoObj;
+      oldSale.items = JSON.parse(JSON.stringify(cart));
+      oldSale.disc = t.dc;
+      oldSale.t = t.t;
+      oldSale.paid = Math.min(t.pd, t.t);
+      targetId = oldSale.id;
+      cart.forEach(function(i) {
+        if (i.sid) {
+          var x = stk(i.sid);
+          if (x) x.q = Math.max(0, x.q - i.q);
+        }
+      });
+      sv(false, "ভাউচার আপডেট", oldSale.no + " (" + c + ")");
+    }
+  } else {
+    DB.seq++;
+    var s = {
+      id: Date.now(),
+      no: "TDS-" + ("000" + DB.seq).slice(-4),
+      d: $("dt").value,
+      c: c,
+      p: $("cp").value.trim(),
+      a: fullAddr,
+      geo: geoObj,
+      items: JSON.parse(JSON.stringify(cart)),
+      disc: t.dc,
+      t: t.t,
+      paid: Math.min(t.pd, t.t)
+    };
+    cart.forEach(function(i) {
+      if (i.sid) {
+        var x = stk(i.sid);
+        if (x) x.q = Math.max(0, x.q - i.q);
+      }
+    });
+    DB.sales.push(s);
+    targetId = s.id;
+    sv(false, "নতুন ভাউচার", s.no + " - " + c + " (" + f(s.t) + " ৳)");
+  }
+
+  resetSaleForm();
+  selOpts();
+  updateCustomerDatalist();
+  render();
+  toast("✅ ভাউচার সফলভাবে সংরক্ষিত হয়েছে!");
+  showV(targetId);
+};
+
+function editSale(id) {
+  var s = DB.sales.find(function(x) { return x.id === id; });
+  if (!s) return;
+  editingSaleId = s.id;
+  $("dt").value = s.d;
+  $("cn").value = s.c;
+  $("cp").value = s.p || "";
+  applySavedCustomerAddress(s);
+  $("dc").value = s.disc || "";
+  $("pd").value = s.paid || "";
+  cart = JSON.parse(JSON.stringify(s.items));
+  $("saleFormTitle").textContent = "✏️ ভাউচার এডিট করুন (" + s.no + ")";
+  $("save").textContent = "💾 আপডেট সেভ করুন";
+  $("cancelEditBtn").style.display = "inline-flex";
+  renderCart();
+  document.querySelector(".tabs button[data-t='s']").click();
+}
+
+/* ==========================================================================
+   7. VOUCHER PREVIEW, A4 / POS 80MM PRINT, QR & WHATSAPP SHARE
+   ========================================================================== */
+function formatWaPhone(phone) {
+  var clean = (phone || "").replace(/\D/g, "");
+  if (!clean) return "";
+  if (clean.startsWith("01") && clean.length === 11) return "88" + clean;
+  if (clean.startsWith("8801")) return clean;
+  return clean;
+}
+
+function sendVoucherWhatsApp(id) {
+  var s = DB.sales.find(function(x) { return x.id === id; });
+  if (!s) return;
+  var waNum = formatWaPhone(s.p);
+  if (!waNum) return toast("⚠️ এই কাস্টমারের সঠিক মোবাইল নম্বর নেই");
+
+  var du = Math.max(0, s.t - s.paid);
+  var itemLines = s.items.map(function(it, idx) {
+    return (idx + 1) + ". " + it.n + " (" + it.q + "x" + f(it.r) + ") = " + f(it.q * it.r) + "৳";
+  }).join("\n");
+
+  var msg = "*তিশা ডিজিটাল স্টুডিও*\n" +
+            "ধলগ্রাম বাজার, বাঘারপাড়া, যশোর\n" +
+            "মোবাইল: 01892-287078\n" +
+            "----------------------------\n" +
+            "ভাউচার নং: *" + s.no + "*\n" +
+            "তারিখ: " + fd(s.d) + "\n" +
+            "কাস্টমার: " + s.c + "\n" +
+            (s.a ? "ঠিকানা: " + s.a + "\n" : "") +
+            "----------------------------\n" +
+            itemLines + "\n" +
+            "----------------------------\n" +
+            "সর্বমোট বিল: *" + f(s.t) + " ৳*\n" +
+            "জমা: " + f(s.paid) + " ৳\n" +
+            (du > 0 ? "বাকি: *" + f(du) + " ৳*\n" : "অবস্থা: *পরিশোধিত ✅*\n") +
+            "\nধন্যবাদ, আবার আসবেন!";
+
+  window.open("https://wa.me/" + waNum + "?text=" + encodeURIComponent(msg), "_blank");
+}
+
+function showV(id) {
+  activeVoucherId = id;
+  var s = DB.sales.find(function(x) { return x.id === id; });
+  if (!s) return;
+  var du = Math.max(0, s.t - s.paid);
+
+  var h = "<div class='vh-wrap'>" +
+    "<div class='vh'>" +
+      "<h2>তিশা ডিজিটাল স্টুডিও</h2>" +
+      "<p>Every Moment of Memories, In Our Frame · 100% Assured Service</p>" +
+      "<p>ধলগ্রাম বাজার, বাঘারপাড়া, যশোর</p>" +
+      "<p><b>প্রোঃ মোঃ ইমন হোসেন</b> · মোবাইল: 01892-287078, 01973-287078</p>" +
+    "</div>" +
+    "<div class='qr-box'><canvas id='vqr' width='78' height='78'></canvas><small>" + s.no + "</small></div>" +
+  "</div>";
+
+  h += "<div style='display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px'><span>ভাউচার নং: <b>" + s.no + "</b></span><span>তারিখ: <b>" + fd(s.d) + "</b></span></div>";
+  h += "<p style='font-size:13.5px;line-height:1.5;margin:4px 0 8px'>কাস্টমার: <b>" + esc(s.c) + "</b> · মোবাইল: " + esc(s.p || "—") + "<br>ঠিকানা: " + esc(s.a || "—") + "</p>";
+
+  h += "<table><thead><tr><th>নং</th><th>বিবরণ</th><th>পরিমাণ</th><th>দর</th><th>টাকা</th></tr></thead><tbody>" +
+    s.items.map(function(i, k) {
+      return "<tr><td>" + (k + 1) + "</td><td>" + esc(i.n) + "</td><td>" + i.q + "</td><td>" + f(i.r) + "</td><td>" + f(i.q * i.r) + "</td></tr>";
+    }).join("") +
+  "</tbody></table>";
+
+  h += "<div class='tot' style='font-size:13.5px;color:#000'>" +
+    "সাব-টোটাল: " + f(s.t + s.disc) + " ৳<br>" +
+    (s.disc > 0 ? "ছাড়: -" + f(s.disc) + " ৳<br>" : "") +
+    "<b>সর্বমোট বিল: " + f(s.t) + " ৳</b><br>" +
+    "নগদ জমা: " + f(s.paid) + " ৳<br>" +
+    "<b>বাকি (Due): " + f(du) + " ৳</b>" +
+  "</div>";
+
+  h += "<div class='sig'><span>ক্রেতার স্বাক্ষর</span><span>বিক্রেতার স্বাক্ষর</span></div>";
+  h += "<p style='text-align:center;font-size:12px;margin:14px 0 0;color:#222'>ধন্যবাদ, আবার আসবেন! · সফটওয়্যার: তিশা ডিজিটাল স্টুডিও</p>";
+
+  $("vp").innerHTML = h;
+  $("vp").className = printMode === "pos" ? "pos-mode" : "";
+  $("vch").style.display = "block";
+
+  var qrData = "TISHA STUDIO|" + s.no + "|" + s.c + "|Total:" + f(s.t) + "|Due:" + f(du);
+  drawQRCode($("vqr"), qrData);
+}
+
+$("vModeA4").onclick = function() { printMode = "a4"; $("vp").className = ""; };
+$("vModePos").onclick = function() { printMode = "pos"; $("vp").className = "pos-mode"; };
+$("vWa").onclick = function() { if (activeVoucherId) sendVoucherWhatsApp(activeVoucherId); };
+$("vcl").onclick = function() { $("vch").style.display = "none"; document.body.className = ""; };
+$("vpr").onclick = function() { document.body.className = "pv"; window.print(); };
+window.onafterprint = function() { document.body.className = ""; };
+
+/* ==========================================================================
+   8. RENDER LISTS, CUSTOMER LEDGER, STOCK & DAILY CASHBOOK
+   ========================================================================== */
+
+/* ===== কাজের রেট ও খরচ ===== */
+function renderRates() {
+  ensureRates();
+  var q = ($("rq").value || "").trim().toLowerCase();
+  $("rtb").innerHTML = DB.rates.filter(function(r) { return !q || (r.n + " " + (r.cat || "")).toLowerCase().indexOf(q) > -1; }).map(function(r) {
+    return "<tr><td><input value=\"" + esc(r.n) + "\" onchange='setRate(" + r.id + ",\"n\",this.value)'></td>" +
+      "<td><input type='number' style='min-width:80px' value='" + r.s + "' onchange='setRate(" + r.id + ",\"s\",this.value)'></td>" +
+      "<td><input type='number' style='min-width:80px' value='" + r.c + "' onchange='setRate(" + r.id + ",\"c\",this.value)'></td>" +
+      "<td class='" + (r.s - r.c < 0 ? "low" : "ok") + "'>" + f(r.s - r.c) + "</td>" +
+      "<td><button class='sm br' onclick='delRate(" + r.id + ")'>✖</button></td></tr>";
+  }).join("") || "<tr><td colspan='5' style='text-align:center;color:var(--mut)'>কোনো কাজ নেই</td></tr>";
+}
+function setRate(id, k, v) {
+  var r = rateById(id);
+  if (!r) return;
+  if (k === "n") { v = String(v).trim(); if (!v) return toast("⚠️ নাম খালি রাখা যাবে না"); r.n = v; } else { r[k] = n(v); }
+  sv(false, "কাজের রেট", r.n);
+  selOpts();
+  renderRates();
+}
+async function delRate(id) {
+  var ok = await customDialog({ title: "কাজটি মুছবেন?", msg: "রেট তালিকা থেকে মুছলেও আগের ভাউচারে কোনো প্রভাব পড়বে না।" });
+  if (!ok) return;
+  DB.rates = DB.rates.filter(function(x) { return x.id !== id; });
+  sv(false, "কাজের রেট মুছা", "");
+  selOpts();
+  renderRates();
+}
+$("radd").onclick = function() {
+  var nm = $("rn").value.trim();
+  if (!nm) return toast("⚠️ কাজের নাম লিখুন");
+  ensureRates();
+  var mx = DB.rates.reduce(function(a, r) { return Math.max(a, r.id); }, 0);
+  DB.rates.push({ id: mx + 1, n: nm, cat: $("rc").value.trim(), s: n($("rs_").value), c: n($("rb_").value) });
+  $("rn").value = $("rs_").value = $("rb_").value = "";
+  sv(false, "নতুন কাজের রেট", nm);
+  selOpts();
+  renderRates();
+  toast("✅ কাজ যোগ হয়েছে");
+};
+$("rq").oninput = renderRates;
+
+function render() {
+  renderRates();
+  renderDailyCashbook();
+
+  // Voucher List
+  var q = $("q").value.trim().toLowerCase();
+  var lf = $("lfilter").value;
+  $("lt").innerHTML = DB.sales.filter(function(s) {
+    var du = s.t - s.paid;
+    if (lf === "due" && du <= 0) return false;
+    if (lf === "paid" && du > 0) return false;
+    return !q || (s.c + " " + s.p + " " + s.no + " " + (s.a || "")).toLowerCase().indexOf(q) > -1;
+  }).slice().reverse().map(function(s) {
+    var du = Math.max(0, s.t - s.paid);
+    return "<tr>" +
+      "<td><b>" + s.no + "</b></td>" +
+      "<td>" + fd(s.d) + "</td>" +
+      "<td><b>" + esc(s.c) + "</b><br><small style='color:var(--mut)'>" + esc(s.p || "") + (s.a ? " · " + esc(s.a) : "") + "</small></td>" +
+      "<td>" + f(s.t) + "</td>" +
+      "<td class='ok'>" + f(s.paid) + "</td>" +
+      "<td class='" + (du > 0 ? "due" : "") + "'>" + f(du) + "</td>" +
+      "<td style='white-space:nowrap'>" +
+        "<button class='sm b2' onclick='showV(" + s.id + ")'>ভাউচার</button> " +
+        (du > 0 ? "<button class='sm bg' onclick='collect(" + s.id + ")'>আদায়</button> " : "") +
+        "<button class='sm bo' onclick='editSale(" + s.id + ")' title='এডিট'>✏️</button> " +
+        "<button class='sm br' onclick='delS(" + s.id + ")' title='মুছুন'>🗑</button>" +
+      "</td>" +
+    "</tr>";
+  }).join("") || "<tr><td colspan='7' style='text-align:center;color:var(--mut)'>কোনো ভাউচার পাওয়া যায়নি</td></tr>";
+
+  // Customer Ledger
+  renderCustomerLedger();
+
+  // Stock List
+  var sv_ = 0;
+  $("kt").innerHTML = DB.stock.map(function(s) {
+    sv_ += s.q * s.b;
+    return "<tr>" +
+      "<td><b>" + esc(s.n) + "</b></td>" +
+      "<td class='" + (s.q <= 5 ? "low" : "ok") + "'>" + s.q + (s.q <= 5 ? " <span class='badge badge-r'>কম</span>" : "") + "</td>" +
+      "<td>" + f(s.b) + "</td>" +
+      "<td>" + f(s.s) + "</td>" +
+      "<td>" + f(s.q * s.b) + "</td>" +
+      "<td style='white-space:nowrap'>" +
+        "<button class='sm bg' onclick='addQ(" + s.id + ")'>+ মজুত</button> " +
+        "<button class='sm br' onclick='delK(" + s.id + ")'>🗑</button>" +
+      "</td>" +
+    "</tr>";
+  }).join("") || "<tr><td colspan='6' style='text-align:center;color:var(--mut)'>স্টকে কোনো পণ্য নেই</td></tr>";
+  $("kv").innerHTML = "মোট স্টক মূল্য (ক্রয় দামে): <b>" + f(sv_) + " ৳</b>";
+
+  // Dashboard & Reports
+  report();
+}
+
+function renderDailyCashbook() {
+  var todayStr = ds(new Date());
+  var todayVoucherPaid = 0;
+  var todayQuickInc = 0;
+  var todayExp = 0;
+  var todayDeposit = 0;
+  var totalAllDeposits = 0;
+
+  DB.sales.forEach(function(s) {
+    if (s.d === todayStr) todayVoucherPaid += s.paid;
+  });
+  DB.qinc.forEach(function(qi) {
+    if (qi.d === todayStr) todayQuickInc += qi.a;
+  });
+  DB.exp.forEach(function(ex) {
+    if (ex.d === todayStr) todayExp += ex.a;
+  });
+  DB.deposits.forEach(function(dp) {
+    totalAllDeposits += dp.a;
+    if (dp.d === todayStr) todayDeposit += dp.a;
+  });
+
+  var todayTotalIn = todayVoucherPaid + todayQuickInc;
+  var todayNetCash = todayTotalIn - todayExp;
+
+  $("dailyCashStats").innerHTML = [
+    ["আজকের মোট নগদ আয়", f(todayTotalIn) + " ৳", "#16a34a", "ভাউচার জমা " + f(todayVoucherPaid) + " + নগদ " + f(todayQuickInc)],
+    ["আজকের মোট ব্যয় / খরচ", f(todayExp) + " ৳", "#dc2626", "দৈনিক সকল খরচ"],
+    ["আজকের নিট ক্যাশ (লাভ)", f(todayNetCash) + " ৳", todayNetCash >= 0 ? "#2563eb" : "#ea580c", "মোট নগদ আয় − মোট ব্যয়"],
+    ["আজকের জমা (মোট জমা: " + f(totalAllDeposits) + " ৳)", f(todayDeposit) + " ৳", "#0d9488", "প্রতিদিনের ব্যাংক / হাতে জমা"]
+  ].map(function(c) {
+    return "<div class='st' style='background:" + c[2] + "'>" +
+      "<small>" + c[0] + "</small>" +
+      "<b>" + c[1] + "</b>" +
+      "<small style='font-size:11px;opacity:0.88;margin-top:2px'>" + c[3] + "</small>" +
+    "</div>";
+  }).join("");
+
+  var fDate = $("dfilterDate").value;
+  var fType = $("dfilterType").value;
+  var combined = [];
+
+  if (fType === "all" || fType === "inc") {
+    DB.qinc.forEach(function(qi) {
+      if (!fDate || qi.d === fDate) {
+        combined.push({
+          id: qi.id,
+          type: "inc",
+          d: qi.d,
+          title: qi.t,
+          sub: qi.note || "ভাউচার ছাড়া নগদ আয়",
+          a: qi.a
+        });
+      }
+    });
+  }
+
+  if (fType === "all" || fType === "exp") {
+    DB.exp.forEach(function(ex) {
+      if (!fDate || ex.d === fDate) {
+        combined.push({
+          id: ex.id,
+          type: "exp",
+          d: ex.d,
+          title: ex.t,
+          sub: ex.cat || "অন্যান্য খরচ",
+          a: ex.a
+        });
+      }
+    });
+  }
+
+  if (fType === "all" || fType === "dep") {
+    DB.deposits.forEach(function(dp) {
+      if (!fDate || dp.d === fDate) {
+        combined.push({
+          id: dp.id,
+          type: "dep",
+          d: dp.d,
+          title: "প্রতিদিনের জমা",
+          sub: dp.note || "ব্যাংক / হাতে জমা",
+          a: dp.a
+        });
+      }
+    });
+  }
+
+  combined.sort(function(a, b) {
+    if (a.d !== b.d) return a.d < b.d ? 1 : -1;
+    return b.id - a.id;
+  });
+
+  $("dailyCashTable").innerHTML = combined.map(function(item) {
+    var isInc = item.type === "inc";
+    var isDep = item.type === "dep";
+    var badgeHtml = isInc
+      ? "<span class='badge badge-g'>➕ আয়</span>"
+      : isDep
+      ? "<span class='badge badge-b'>🏦 জমা</span>"
+      : "<span class='badge badge-r'>➖ ব্যয়</span>";
+    var amtClass = isInc ? "ok" : isDep ? "" : "due";
+    var amtStyle = isDep ? "style='color:var(--p2);font-weight:700'" : "";
+    var prefix = isInc ? "+" : isDep ? "🏦 " : "-";
+    var editCall = isInc ? "editQInc(" + item.id + ")" : isDep ? "editDep(" + item.id + ")" : "editExp(" + item.id + ")";
+    var delCall = isInc ? "delQInc(" + item.id + ")" : isDep ? "delDep(" + item.id + ")" : "delE(" + item.id + ")";
+
+    return "<tr>" +
+      "<td>" + fd(item.d) + "</td>" +
+      "<td>" + badgeHtml + "</td>" +
+      "<td><b>" + esc(item.title) + "</b><br><small style='color:var(--mut)'>" + esc(item.sub) + "</small></td>" +
+      "<td class='" + amtClass + "' " + amtStyle + ">" + prefix + f(item.a) + " ৳</td>" +
+      "<td style='white-space:nowrap'>" +
+        "<button class='sm bo' onclick=\"" + editCall + "\" title='এডিট'>✏️</button> " +
+        "<button class='sm br' onclick=\"" + delCall + "\" title='মুছুন'>🗑</button>" +
+      "</td>" +
+    "</tr>";
+  }).join("") || "<tr><td colspan='5' style='text-align:center;color:var(--mut)'>নির্বাচিত তারিখে কোনো লেনদেন পাওয়া যায়নি</td></tr>";
+}
+
+function renderCustomerLedger() {
+  var map = {};
+  var totalDueAll = 0, dueCustCount = 0;
+
+  DB.sales.forEach(function(s) {
+    var key = (s.p && s.p.trim()) ? s.p.trim() : s.c.trim().toLowerCase();
+    if (!map[key]) {
+      map[key] = { name: s.c, phone: s.p || "", addr: s.a || "", count: 0, billed: 0, paid: 0, due: 0 };
+    }
+    var du = Math.max(0, s.t - s.paid);
+    map[key].count++;
+    map[key].billed += s.t;
+    map[key].paid += s.paid;
+    map[key].due += du;
+    if (s.p && !map[key].phone) map[key].phone = s.p;
+    if (s.a) map[key].addr = s.a;
+  });
+
+  var list = Object.values(map);
+  list.forEach(function(c) {
+    if (c.due > 0) {
+      totalDueAll += c.due;
+      dueCustCount++;
+    }
+  });
+
+  $("custStats").innerHTML = [
+    ["মোট কাস্টমার", list.length + " জন", "#2563eb"],
+    ["বাকি কাস্টমার", dueCustCount + " জন", "#ea580c"],
+    ["সর্বমোট বকেয়া পাওনা", f(totalDueAll) + " ৳", "#dc2626"]
+  ].map(function(c) {
+    return "<div class='st' style='background:" + c[2] + "'><small>" + c[0] + "</small><b>" + c[1] + "</b></div>";
+  }).join("");
+
+  var cq = $("cq").value.trim().toLowerCase();
+  var cf = $("cfilter").value;
+
+  var filtered = list.filter(function(c) {
+    if (cf === "due" && c.due <= 0) return false;
+    return !cq || (c.name + " " + c.phone + " " + c.addr).toLowerCase().indexOf(cq) > -1;
+  }).sort(function(a, b) { return b.due - a.due; });
+
+  $("custTable").innerHTML = filtered.map(function(c) {
+    var waNum = formatWaPhone(c.phone);
+    var waBtn = waNum
+      ? "<button class='sm bwa' onclick=\"sendDueReminder('" + esc(c.name) + "','" + waNum + "'," + c.due + ")\">💬 WhatsApp তাগাদা</button>"
+      : "<span style='font-size:11px;color:var(--mut)'>নম্বর নেই</span>";
+    return "<tr>" +
+      "<td><b>" + esc(c.name) + "</b></td>" +
+      "<td>" + esc(c.phone || "—") + (c.addr ? "<br><small style='color:var(--mut)'>" + esc(c.addr) + "</small>" : "") + "</td>" +
+      "<td>" + c.count + " টি</td>" +
+      "<td>" + f(c.billed) + " ৳</td>" +
+      "<td class='ok'>" + f(c.paid) + " ৳</td>" +
+      "<td class='" + (c.due > 0 ? "due" : "ok") + "'>" + f(c.due) + " ৳</td>" +
+      "<td>" + waBtn + "</td>" +
+    "</tr>";
+  }).join("") || "<tr><td colspan='7' style='text-align:center;color:var(--mut)'>কোনো কাস্টমার পাওয়া যায়নি</td></tr>";
+}
+
+function sendDueReminder(name, waNum, due) {
+  var msg = "আসসালামু আলাইকুম " + name + ",\n" +
+            "*তিশা ডিজিটাল স্টুডিও* (ধলগ্রাম বাজার, বাঘারপাড়া, যশোর) থেকে বলছি।\n" +
+            "আপনার নামে আমাদের দোকানে *" + f(due) + " ৳* বকেয়া (Due) রয়েছে।\n" +
+            "সুবিধামতো সময়ে বকেয়া টাকা পরিশোধ করার জন্য অনুরোধ করা হলো।\n" +
+            "ধন্যবাদ। (প্রোঃ মোঃ ইমন হোসেন - 01892-287078)";
+  window.open("https://wa.me/" + waNum + "?text=" + encodeURIComponent(msg), "_blank");
+}
+
+/* ==========================================================================
+   9. ACTIONS (COLLECT DUE, DELETE, STOCK, EXPENSE, DEPOSIT)
+   ========================================================================== */
+async function collect(id) {
+  var s = DB.sales.find(function(x) { return x.id === id; });
+  if (!s) return;
+  var rem = s.t - s.paid;
+  var res = await customDialog({
+    title: "বাকি টাকা আদায় (" + s.no + ")",
+    msg: "কাস্টমার: " + s.c + " · বর্তমান বাকি: " + f(rem) + " ৳। কত টাকা জমা দিচ্ছেন?",
+    input: true,
+    inputType: "number",
+    defaultValue: f(rem)
+  });
+  var a = n(res);
+  if (a > 0) {
+    s.paid = Math.min(s.t, s.paid + a);
+    sv(false, "বকেয়া আদায়", s.no + " থেকে +" + f(a) + " ৳");
+    render();
+    toast("✅ " + f(a) + " ৳ বকেয়া আদায় হয়েছে");
+  }
+}
+
+async function delS(id) {
+  var ok = await customDialog({
+    title: "ভাউচার মুছবেন?",
+    msg: "ভাউচারটি মুছে ফেললে বিক্রিত স্টক পণ্য পুনরায় স্টকে ফেরত যাবে।"
+  });
+  if (!ok) return;
+  var s = DB.sales.find(function(x) { return x.id === id; });
+  if (s) {
+    s.items.forEach(function(i) {
+      if (i.sid) {
+        var x = stk(i.sid);
+        if (x) x.q += i.q;
+      }
+    });
+  }
+  DB.sales = DB.sales.filter(function(x) { return x.id !== id; });
+  sv(false, "ভাউচার মুছে ফেলা", s ? s.no : "ভাউচার");
+  selOpts();
+  updateCustomerDatalist();
+  render();
+  toast("🗑 ভাউচার মুছে ফেলা হয়েছে");
+}
+
+$("sadd").onclick = function() {
+  var nm = $("sn").value.trim();
+  if (!nm) return toast("⚠️ পণ্যের নাম লিখুন");
+  var qtyVal = n($("sq").value);
+  DB.stock.push({
+    id: Date.now(),
+    n: nm,
+    q: qtyVal,
+    b: n($("sb").value),
+    s: n($("ss").value)
+  });
+  sv(false, "নতুন স্টক", nm + " (" + qtyVal + " টি)");
+  ["sn", "sq", "sb", "ss"].forEach(function(i) { $(i).value = ""; });
+  selOpts();
+  render();
+  toast("✅ নতুন স্টক পণ্য যোগ হয়েছে");
+};
+
+async function addQ(id) {
+  var st = stk(id);
+  if (!st) return;
+  var res = await customDialog({
+    title: "মজুত বৃদ্ধি (" + st.n + ")",
+    msg: "বর্তমান মজুত: " + st.q + " টি। নতুন কতটি যোগ করবেন?",
+    input: true,
+    inputType: "number",
+    defaultValue: "10"
+  });
+  var a = n(res);
+  if (a > 0) {
+    st.q += a;
+    sv(false, "মজুত বৃদ্ধি", st.n + " +" + a + " টি");
+    selOpts();
+    render();
+    toast("✅ " + a + " টি মজুত যোগ করা হয়েছে");
+  }
+}
+
+async function delK(id) {
+  var ok = await customDialog({ title: "স্টক পণ্য মুছবেন?", msg: "আপনি কি নিশ্চিতভাবে এই পণ্যটি স্টক থেকে মুছতে চান?" });
+  if (ok) {
+    var st = stk(id);
+    DB.stock = DB.stock.filter(function(x) { return x.id !== id; });
+    sv(false, "স্টক পণ্য মুছে ফেলা", st ? st.n : "পণ্য");
+    selOpts();
+    render();
+    toast("🗑 পণ্যটি মুছে ফেলা হয়েছে");
+  }
+}
+
+$("eadd").onclick = function() {
+  var a = n($("ea").value);
+  var desc = $("et").value.trim();
+  if (!desc) return toast("⚠️ খরচের বিবরণ লিখুন বা প্রিসেট বাছাই করুন");
+  if (a <= 0) return toast("⚠️ সঠিক টাকার পরিমাণ দিন");
+  DB.exp.push({
+    id: Date.now(),
+    d: $("edt").value || ds(new Date()),
+    cat: $("ecat").value,
+    t: desc,
+    a: a
+  });
+  sv(false, "দৈনিক খরচ", desc + " (" + f(a) + " ৳)");
+  $("et").value = $("ea").value = "";
+  document.querySelectorAll("#expChips .chip").forEach(function(x) { x.classList.remove("active"); });
+  render();
+  toast("✅ " + f(a) + " ৳ খরচ সেভ হয়েছে");
+};
+
+async function editQInc(id) {
+  var item = DB.qinc.find(function(x) { return x.id === id; });
+  if (!item) return;
+  var newAmt = await customDialog({
+    title: "নগদ আয় এডিট (" + item.t + ")",
+    msg: "নতুন টাকার পরিমাণ লিখুন:",
+    input: true,
+    inputType: "number",
+    defaultValue: f(item.a)
+  });
+  if (newAmt !== null && n(newAmt) > 0) {
+    item.a = n(newAmt);
+    sv(false, "নগদ আয় এডিট", item.t + " (" + f(item.a) + " ৳)");
+    render();
+    toast("✅ নগদ আয় আপডেট হয়েছে");
+  }
+}
+
+async function delQInc(id) {
+  var ok = await customDialog({ title: "নগদ আয় মুছবেন?", msg: "এই আয়ের হিসাবটি স্থায়ীভাবে মুছে যাবে।" });
+  if (ok) {
+    var item = DB.qinc.find(function(x) { return x.id === id; });
+    DB.qinc = DB.qinc.filter(function(x) { return x.id !== id; });
+    sv(false, "নগদ আয় মুছে ফেলা", item ? item.t : "আয়");
+    render();
+    toast("🗑 নগদ আয় মুছে ফেলা হয়েছে");
+  }
+}
+
+async function editExp(id) {
+  var item = DB.exp.find(function(x) { return x.id === id; });
+  if (!item) return;
+  var newAmt = await customDialog({
+    title: "খরচ এডিট (" + item.t + ")",
+    msg: "নতুন খরচের পরিমাণ লিখুন:",
+    input: true,
+    inputType: "number",
+    defaultValue: f(item.a)
+  });
+  if (newAmt !== null && n(newAmt) > 0) {
+    item.a = n(newAmt);
+    sv(false, "খরচ এডিট", item.t + " (" + f(item.a) + " ৳)");
+    render();
+    toast("✅ খরচ আপডেট হয়েছে");
+  }
+}
+
+async function delE(id) {
+  var ok = await customDialog({ title: "খরচ মুছবেন?", msg: "এই খরচের হিসাবটি স্থায়ীভাবে মুছে যাবে।" });
+  if (ok) {
+    var item = DB.exp.find(function(x) { return x.id === id; });
+    DB.exp = DB.exp.filter(function(x) { return x.id !== id; });
+    sv(false, "খরচ মুছে ফেলা", item ? item.t : "খরচ");
+    render();
+    toast("🗑 খরচ মুছে ফেলা হয়েছে");
+  }
+}
+
+async function editDep(id) {
+  var item = DB.deposits.find(function(x) { return x.id === id; });
+  if (!item) return;
+  var newAmt = await customDialog({
+    title: "জমা এডিট (" + fd(item.d) + ")",
+    msg: "নতুন জমার পরিমাণ লিখুন:",
+    input: true,
+    inputType: "number",
+    defaultValue: f(item.a)
+  });
+  if (newAmt !== null && n(newAmt) >= 0) {
+    item.a = n(newAmt);
+    sv(false, "জমা এডিট", fd(item.d) + " (" + f(item.a) + " ৳)");
+    render();
+    toast("✅ জমার হিসাব আপডেট হয়েছে");
+  }
+}
+
+async function delDep(id) {
+  var ok = await customDialog({ title: "জমার হিসাব মুছবেন?", msg: "এই জমার এন্ট্রিটি মুছে যাবে।" });
+  if (ok) {
+    var item = DB.deposits.find(function(x) { return x.id === id; });
+    DB.deposits = DB.deposits.filter(function(x) { return x.id !== id; });
+    sv(false, "জমা মুছে ফেলা", item ? fd(item.d) : "জমা");
+    render();
+    toast("🗑 জমার হিসাব মুছে ফেলা হয়েছে");
+  }
+}
+
+$("q").oninput = $("lfilter").onchange = $("cq").oninput = $("cfilter").onchange = render;
+
+/* ==========================================================================
+   10. OFFLINE-FIRST STATUS & SYNC QUEUE / CLOUD SYNC ENGINE
+   ========================================================================== */
+function formatSyncTime(iso) {
+  if (!iso) return "এখনো হয়নি";
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) return "এখনো হয়নি";
+  return p2(d.getDate()) + "/" + p2(d.getMonth() + 1) + "/" + d.getFullYear() + " " + p2(d.getHours()) + ":" + p2(d.getMinutes());
+}
+
+function updateNetworkBadge() {
+  var online = navigator.onLine;
+  var badge = $("netBadge");
+  if (!badge) return;
+  if (online) {
+    badge.className = "net-pill net-online";
+    badge.textContent = "🟢 অনলাইন (ইন্টারনেট চালু)";
+  } else {
+    badge.className = "net-pill net-offline";
+    badge.textContent = "🔴 অফলাইন (নেট নেই · লোকাল সেভ চালু)";
+  }
+}
+
+function updateSyncUI() {
+  updateNetworkBadge();
+  var qLen = (DB.sync && Array.isArray(DB.sync.queue)) ? DB.sync.queue.length : 0;
+  var pBadge = $("pendingSyncBadge");
+  var lText = $("lastSyncText");
+  if (pBadge) {
+    if (qLen > 0) {
+      pBadge.className = "sync-pill sync-pending";
+      pBadge.textContent = "⏳ পেন্ডিং সিঙ্ক: " + qLen + "টি পরিবর্তন";
+    } else {
+      pBadge.className = "sync-pill sync-synced";
+      pBadge.textContent = "✅ সিঙ্ক আপ-টু-ডেট (০ পেন্ডিং)";
+    }
+  }
+  if (lText) {
+    lText.textContent = "সর্বশেষ সিঙ্ক: " + formatSyncTime(DB.sync ? DB.sync.lastSyncedAt : "");
+  }
+
+  if ($("syncQueueStats")) {
+    $("syncQueueStats").innerHTML = [
+      ["অবস্থা", navigator.onLine ? "অনলাইন" : "অফলাইন (লোকাল মোড)", navigator.onLine ? "#16a34a" : "#dc2626"],
+      ["কিউতে থাকা পরিবর্তন", qLen + " টি", qLen > 0 ? "#ea580c" : "#2563eb"],
+      ["সর্বশেষ সিঙ্ক", formatSyncTime(DB.sync ? DB.sync.lastSyncedAt : ""), "#6d28d9"]
+    ].map(function(c) {
+      return "<div class='st' style='background:" + c[2] + "'><small>" + c[0] + "</small><b>" + c[1] + "</b></div>";
+    }).join("");
+  }
+
+  if ($("syncQueueTable")) {
+    var rows = (DB.sync.queue || []).slice().reverse().slice(0, 25);
+    $("syncQueueTable").innerHTML = rows.map(function(item) {
+      var d = new Date(item.ts);
+      var timeStr = isNaN(d.getTime()) ? item.ts : (p2(d.getHours()) + ":" + p2(d.getMinutes()) + ":" + p2(d.getSeconds()));
+      var stBadge = navigator.onLine
+        ? "<span class='badge badge-b'>সিঙ্কের অপেক্ষায়</span>"
+        : "<span class='badge badge-r'>অফলাইন কিউতে সেভ</span>";
+      return "<tr><td>" + timeStr + "</td><td><b>" + esc(item.action) + "</b></td><td>" + esc(item.detail) + "</td><td>" + stBadge + "</td></tr>";
+    }).join("") || "<tr><td colspan='4' style='text-align:center;color:var(--mut)'>কোনো পেন্ডিং অফলাইন পরিবর্তন নেই — সব ডাটা লোকালি সুরক্ষিত আছে</td></tr>";
+  }
+}
+
+function loadSyncSettingsToInputs() {
+  if ($("syncWebhookUrl")) $("syncWebhookUrl").value = (DB.sync && DB.sync.webhookUrl) || "";
+  if ($("autoSyncOnOnline")) $("autoSyncOnOnline").checked = DB.sync ? DB.sync.autoSync !== false : true;
+}
+
+$("saveSyncCfgBtn").onclick = function() {
+  DB.sync.webhookUrl = ($("syncWebhookUrl").value || "").trim();
+  DB.sync.autoSync = $("autoSyncOnOnline").checked;
+  sv(true);
+  toast("✅ সিঙ্ক সেটিংস সংরক্ষিত হয়েছে");
+};
+
+function buildSnapshotPayload(mode) {
+  return {
+    app: "tisha-digital-studio-pro",
+    mode: mode || "push",
+    updatedAt: new Date().toISOString(),
+    data: {
+      stock: DB.stock,
+      sales: DB.sales,
+      exp: DB.exp,
+      qinc: DB.qinc,
+      deposits: DB.deposits,
+      rates: DB.rates,
+      seq: DB.seq,
+      customGeo: DB.customGeo
+    }
+  };
+}
+
+function applyRemoteSnapshot(remoteData) {
+  if (!remoteData || typeof remoteData !== "object") return false;
+  var src = remoteData.data && typeof remoteData.data === "object" ? remoteData.data : remoteData;
+  if (!Array.isArray(src.sales) || !Array.isArray(src.stock) || !Array.isArray(src.exp)) return false;
+
+  DB.stock = src.stock;
+  DB.sales = src.sales;
+  DB.exp = src.exp;
+  DB.qinc = Array.isArray(src.qinc) ? src.qinc : [];
+  DB.deposits = Array.isArray(src.deposits) ? src.deposits : [];
+  if (Array.isArray(src.rates)) DB.rates = src.rates;
+  DB.seq = Math.max(n(DB.seq), n(src.seq), DB.sales.length);
+  if (src.customGeo && typeof src.customGeo === "object") {
+    DB.customGeo = {
+      upz: src.customGeo.upz || {},
+      uni: src.customGeo.uni || {},
+      vil: src.customGeo.vil || {}
+    };
+  }
+  return true;
+}
+
+async function performCloudSync(mode, silent) {
+  if (isSyncingNow) return;
+  if (!navigator.onLine) {
+    if (!silent) toast("📴 আপনি বর্তমানে অফলাইনে আছেন। নেট এলে কিউ থেকে সিঙ্ক করতে পারবেন।");
+    updateSyncUI();
+    return;
+  }
+
+  var url = (DB.sync && DB.sync.webhookUrl) ? DB.sync.webhookUrl.trim() : "";
+  if (!url) {
+    if (!silent) toast("ℹ️ ক্লাউড URL সেট করা নেই। লোকাল ডাটা সুরক্ষিত আছে; চাইলে নিচে Webhook/Apps Script URL দিন।");
+    updateSyncUI();
+    return;
+  }
+
+  isSyncingNow = true;
+  try {
+    if (mode === "pull") {
+      var sep = url.indexOf("?") > -1 ? "&" : "?";
+      var resp = await fetch(url + sep + "action=pull&t=" + Date.now(), { method: "GET" });
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      var json = await resp.json();
+      if (!applyRemoteSnapshot(json)) throw new Error("Invalid remote payload");
+      DB.sync.queue = [];
+      DB.sync.lastSyncedAt = new Date().toISOString();
+      sv(true);
+      selOpts();
+      updateCustomerDatalist();
+      render();
+      if (!silent) toast("⬇️ ক্লাউড থেকে সর্বশেষ ডাটা ডাউনলোড ও সিঙ্ক হয়েছে!");
+    } else {
+      var payload = buildSnapshotPayload("sync");
+      await fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      DB.sync.queue = [];
+      DB.sync.lastSyncedAt = new Date().toISOString();
+      sv(true);
+      if (!silent) toast("☁️ অফলাইন কিউ ও সব ডাটা সফলভাবে সিঙ্ক হয়েছে!");
+    }
+  } catch (err) {
+    if (!silent) toast("⚠️ ক্লাউড সিঙ্ক সম্পন্ন করা যায়নি। লোকাল ডাটা নিরাপদ আছে।");
+  } finally {
+    isSyncingNow = false;
+    updateSyncUI();
+  }
+}
+
+$("quickSyncBtn").onclick = function() { performCloudSync("push", false); };
+$("runSyncNowBtn").onclick = function() { performCloudSync("push", false); };
+$("pullCloudBtn").onclick = function() { performCloudSync("pull", false); };
+$("openSyncTabBtn").onclick = function() {
+  var tabBtn = document.querySelector(".tabs button[data-t='b']");
+  if (tabBtn) tabBtn.click();
+  setTimeout(function() {
+    var card = $("cloudSyncCard");
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 80);
+};
+$("markSyncedBtn").onclick = function() {
+  DB.sync.queue = [];
+  DB.sync.lastSyncedAt = new Date().toISOString();
+  sv(true);
+  toast("✅ পেন্ডিং সিঙ্ক কিউ ক্লিয়ার করা হয়েছে");
+};
+
+window.addEventListener("online", function() {
+  updateNetworkBadge();
+  updateSyncUI();
+  toast("🟢 ইন্টারনেট সংযোগ ফিরে এসেছে!");
+  if (DB.sync && DB.sync.autoSync !== false && DB.sync.webhookUrl && DB.sync.queue.length > 0) {
+    performCloudSync("push", true);
+  }
+});
+
+window.addEventListener("offline", function() {
+  updateNetworkBadge();
+  updateSyncUI();
+  toast("🔴 অফলাইন মোড চালু: নেট ছাড়াও সব ডাটা লোকালি সেভ হবে।");
+});
+
+/* ==========================================================================
+   11. ADVANCED DASHBOARD, REPORTS & INTERACTIVE CHART
+   ========================================================================== */
+var lastChartData = [];
+
+$("rperiod").onchange = function() {
+  var isCustom = $("rperiod").value === "custom";
+  $("rfromBox").style.display = isCustom ? "block" : "none";
+  $("rtoBox").style.display = isCustom ? "block" : "none";
+  report();
+};
+$("rfrom").onchange = $("rto").onchange = report;
+
+function getDateRange() {
+  var p = $("rperiod").value;
+  var today = new Date();
+  var endStr = ds(today);
+  var startStr = "2000-01-01";
+
+  if (p === "today") {
+    startStr = endStr;
+  } else if (p === "7") {
+    var d7 = new Date(); d7.setDate(today.getDate() - 6);
+    startStr = ds(d7);
+  } else if (p === "30") {
+    var d30 = new Date(); d30.setDate(today.getDate() - 29);
+    startStr = ds(d30);
+  } else if (p === "month") {
+    startStr = today.getFullYear() + "-" + p2(today.getMonth() + 1) + "-01";
+  } else if (p === "custom") {
+    startStr = $("rfrom").value || "2000-01-01";
+    endStr = $("rto").value || endStr;
+  }
+  return { start: startStr, end: endStr };
+}
+
+function report() {
+  var range = getDateRange();
+  var days = {}, itemAgg = {};
+  var VSales = 0, QInc = 0, P = 0, DU = 0, C = 0, E = 0, DEP = 0;
+
+  DB.sales.forEach(function(s) {
+    if (s.d < range.start || s.d > range.end) return;
+    if (!days[s.d]) days[s.d] = { vs: 0, qi: 0, c: 0, e: 0, dep: 0, expNotes: [] };
+    var cost = s.items.reduce(function(a, i) {
+      if (!itemAgg[i.n]) itemAgg[i.n] = { q: 0, rev: 0 };
+      itemAgg[i.n].q += i.q;
+      itemAgg[i.n].rev += i.q * i.r;
+      return a + i.q * (i.b || 0);
+    }, 0);
+
+    days[s.d].vs += s.t;
+    days[s.d].c += cost;
+    VSales += s.t;
+    P += s.paid;
+    DU += Math.max(0, s.t - s.paid);
+    C += cost;
+  });
+
+  DB.qinc.forEach(function(qi) {
+    if (qi.d < range.start || qi.d > range.end) return;
+    if (!days[qi.d]) days[qi.d] = { vs: 0, qi: 0, c: 0, e: 0, dep: 0, expNotes: [] };
+    days[qi.d].qi += qi.a;
+    QInc += qi.a;
+    P += qi.a;
+
+    if (!itemAgg[qi.t]) itemAgg[qi.t] = { q: 0, rev: 0 };
+    itemAgg[qi.t].q += 1;
+    itemAgg[qi.t].rev += qi.a;
+  });
+
+  DB.exp.forEach(function(x) {
+    if (x.d < range.start || x.d > range.end) return;
+    if (!days[x.d]) days[x.d] = { vs: 0, qi: 0, c: 0, e: 0, dep: 0, expNotes: [] };
+    days[x.d].e += x.a;
+    if (x.t) days[x.d].expNotes.push(x.t);
+    E += x.a;
+  });
+
+  DB.deposits.forEach(function(dp) {
+    if (dp.d < range.start || dp.d > range.end) return;
+    if (!days[dp.d]) days[dp.d] = { vs: 0, qi: 0, c: 0, e: 0, dep: 0, expNotes: [] };
+    days[dp.d].dep += dp.a;
+    DEP += dp.a;
+  });
+
+  var totalRevenue = VSales + QInc;
+  var netProfit = totalRevenue - C - E;
+  var unDepositedCash = netProfit - DEP;
+
+  var cards = [
+    ["মোট আয় (ভাউচার + নগদ)", totalRevenue, "#2563eb", ""],
+    ["ভাউচার ছাড়া নগদ আয়", QInc, "#0284c7", ""],
+    ["মোট নগদ প্রাপ্তি (Cash In)", P, "#16a34a", ""],
+    ["কাস্টমার বকেয়া (Due)", DU, "#dc2626", ""],
+    ["ভাউচার থেকে লাভ (ইনকাম)", VSales - C, (VSales - C) >= 0 ? "#059669" : "#be123c", "বিক্রয় মূল্য − ক্রয়মূল্য"],
+    ["মোট খরচ (পণ্য + দৈনিক)", C + E, "#f59e0b", ""],
+    ["নিট লাভ (Net Profit)", netProfit, netProfit >= 0 ? "#0d9488" : "#be123c", ""],
+    ["মোট জমা (প্রতিদিনের জমা)", DEP, "#6d28d9", "হাতে অবশিষ্ট (লাভ − জমা): " + f(unDepositedCash) + " ৳"]
+  ];
+  $("rs").innerHTML = cards.map(function(c) {
+    return "<div class='st' style='background:" + c[2] + "'>" +
+      "<small>" + c[0] + "</small>" +
+      "<b>" + f(c[1]) + " ৳</b>" +
+      (c[3] ? "<small style='font-size:11px;opacity:0.9;margin-top:2px'>" + c[3] + "</small>" : "") +
+    "</div>";
+  }).join("");
+
+  var sortedKeys = Object.keys(days).sort();
+  $("rt").innerHTML = sortedKeys.slice().reverse().map(function(k) {
+    var v = days[k];
+    var totalOut = v.c + v.e;
+    var l = (v.vs + v.qi) - totalOut;
+    var expText = v.expNotes.length ? v.expNotes.join(", ") : "—";
+    return "<tr>" +
+      "<td>" + fd(k) + "</td>" +
+      "<td>" + f(v.vs) + "</td>" +
+      "<td class='ok'>" + f(v.qi) + "</td>" +
+      "<td><small style='color:var(--mut)'>" + esc(expText) + "</small></td>" +
+      "<td class='due'>" + f(totalOut) + "</td>" +
+      "<td class='" + (l < 0 ? "low" : "ok") + "'>" + f(l) + "</td>" +
+      "<td style='color:var(--p2);font-weight:700'>" + f(v.dep) + "</td>" +
+    "</tr>";
+  }).join("") || "<tr><td colspan='7' style='text-align:center;color:var(--mut)'>নির্বাচিত সময়ে কোনো হিসাব নেই</td></tr>";
+
+  var topList = Object.keys(itemAgg).map(function(k) {
+    return { name: k, q: itemAgg[k].q, rev: itemAgg[k].rev };
+  }).sort(function(a, b) { return b.rev - a.rev; }).slice(0, 10);
+
+  $("topItems").innerHTML = topList.map(function(it) {
+    return "<tr><td>" + esc(it.name) + "</td><td>" + f(it.q) + "</td><td class='ok'>" + f(it.rev) + " ৳</td></tr>";
+  }).join("") || "<tr><td colspan='3' style='text-align:center;color:var(--mut)'>কোনো ডাটা নেই</td></tr>";
+
+  lastChartData = sortedKeys.slice(-14).map(function(k) {
+    var v = days[k];
+    var inc = v.vs + v.qi;
+    var out = v.c + v.e;
+    return { label: k.slice(5), sales: inc, expense: out, profit: Math.max(0, inc - out) };
+  });
+  drawChart();
+}
+
+function drawChart() {
+  var canvas = $("salesChart");
+  if (!canvas) return;
+  var box = canvas.parentElement;
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = box.clientWidth * dpr;
+  canvas.height = box.clientHeight * dpr;
+  var ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  var w = box.clientWidth;
+  var h = box.clientHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  var textColor = isDark ? "#94a3b8" : "#64748b";
+  var gridColor = isDark ? "#334155" : "#e2e8f0";
+
+  if (!lastChartData.length) {
+    ctx.fillStyle = textColor;
+    ctx.font = "14px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("গ্রাফ দেখানোর জন্য পর্যাপ্ত লেনদেন ডাটা নেই", w / 2, h / 2);
+    return;
+  }
+
+  var padL = 48, padR = 16, padT = 20, padB = 30;
+  var chartW = w - padL - padR;
+  var chartH = h - padT - padB;
+  var maxVal = Math.max(100, Math.max.apply(null, lastChartData.map(function(d) { return Math.max(d.sales, d.expense); })));
+
+  ctx.strokeStyle = gridColor;
+  ctx.fillStyle = textColor;
+  ctx.font = "11px sans-serif";
+  ctx.textAlign = "right";
+  for (var g = 0; g <= 4; g++) {
+    var y = padT + chartH - (chartH * g / 4);
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(w - padR, y);
+    ctx.stroke();
+    ctx.fillText(Math.round(maxVal * g / 4), padL - 6, y + 4);
+  }
+
+  var step = chartW / lastChartData.length;
+  var barW = Math.min(16, step * 0.25);
+
+  lastChartData.forEach(function(d, idx) {
+    var cx = padL + step * idx + step / 2;
+    var sH = (d.sales / maxVal) * chartH;
+    var eH = (d.expense / maxVal) * chartH;
+    var pH = (d.profit / maxVal) * chartH;
+
+    ctx.fillStyle = "#2563eb";
+    ctx.fillRect(cx - barW * 1.5 - 1, padT + chartH - sH, barW, sH);
+
+    ctx.fillStyle = "#dc2626";
+    ctx.fillRect(cx - barW * 0.5, padT + chartH - eH, barW, eH);
+
+    ctx.fillStyle = "#16a34a";
+    ctx.fillRect(cx + barW * 0.5 + 1, padT + chartH - pH, barW, pH);
+
+    ctx.fillStyle = textColor;
+    ctx.textAlign = "center";
+    ctx.fillText(d.label, cx, h - 10);
+  });
+}
+window.addEventListener("resize", function() { if (!$("t-r").hidden) drawChart(); });
+
+/* ==========================================================================
+   12. BACKUP & CSV/EXCEL EXPORT
+   ========================================================================== */
+$("dlJson").onclick = function() {
+  var blob = new Blob([JSON.stringify(DB, null, 2)], { type: "application/json" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Tisha_Studio_Backup_" + ds(new Date()) + ".json";
+  a.click();
+  toast("✅ ব্যাকআপ ফাইল ডাউনলোড শুরু হয়েছে");
+};
+
+$("ulJsonBtn").onclick = function() { $("ulJsonInput").click(); };
+$("ulJsonInput").onchange = function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = async function(ev) {
+    try {
+      var parsed = JSON.parse(ev.target.result);
+      if (!parsed.sales || !parsed.stock || !parsed.exp) throw new Error();
+      var ok = await customDialog({
+        title: "ব্যাকআপ রিস্টোর করবেন?",
+        msg: "ফাইলের ডাটা লোড করলে বর্তমান ব্রাউজারের ডাটা প্রতিস্থাপিত হবে।"
+      });
+      if (ok) {
+        if (!Array.isArray(parsed.qinc)) parsed.qinc = [];
+        if (!Array.isArray(parsed.deposits)) parsed.deposits = [];
+        if (!parsed.customGeo) parsed.customGeo = { upz: {}, uni: {}, vil: {} };
+        if (!parsed.sync) parsed.sync = { webhookUrl: "", autoSync: true, lastSyncedAt: "", queue: [] };
+        DB = parsed;
+        sv(true);
+        selOpts();
+        updateCustomerDatalist();
+        loadSyncSettingsToInputs();
+        onUpazilaChange(true);
+        onUnionChange(true);
+        render();
+        toast("✅ সফলভাবে ব্যাকআপ রিস্টোর হয়েছে!");
+      }
+    } catch (err) {
+      toast("❌ ফাইলটি সঠিক ব্যাকআপ ফাইল নয়");
+    }
+    $("ulJsonInput").value = "";
+  };
+  reader.readAsText(file);
+};
+
+function downloadCSV(filename, rows) {
+  var csvContent = "\uFEFF" + rows.map(function(r) {
+    return r.map(function(cell) {
+      return '"' + String(cell == null ? "" : cell).replace(/"/g, '""') + '"';
+    }).join(",");
+  }).join("\n");
+  var blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  toast("📊 Excel/CSV রিপোর্ট ডাউনলোড হয়েছে");
+}
+
+$("dlCsvSales").onclick = function() {
+  var rows = [["ভাউচার নং", "তারিখ", "কাস্টমারের নাম", "মোবাইল", "ঠিকানা", "বিবরণ", "মোট বিল", "ছাড়", "নগদ জমা", "বাকি"]];
+  DB.sales.forEach(function(s) {
+    var itemsText = s.items.map(function(i) { return i.n + " (" + i.q + ")"; }).join("; ");
+    rows.push([s.no, fd(s.d), s.c, s.p, s.a, itemsText, s.t, s.disc, s.paid, Math.max(0, s.t - s.paid)]);
+  });
+  downloadCSV("Tisha_Voucher_Sales_" + ds(new Date()) + ".csv", rows);
+};
+
+$("dlCsvQInc").onclick = function() {
+  var rows = [["তারিখ", "আয়ের বিবরণ", "নোট / কাস্টমার", "আয় (টাকা)", "জমা (টাকা)"]];
+  var depByDate = {};
+  DB.deposits.forEach(function(dp) { depByDate[dp.d] = (depByDate[dp.d] || 0) + dp.a; });
+  DB.qinc.forEach(function(qi) {
+    rows.push([fd(qi.d), qi.t, qi.note || "", qi.a, qi.dep != null ? qi.dep : (depByDate[qi.d] || 0)]);
+  });
+  downloadCSV("Tisha_Daily_Cash_Income_Deposit_" + ds(new Date()) + ".csv", rows);
+};
+
+$("dlCsvExp").onclick = function() {
+  var rows = [["তারিখ", "খাত", "খরচের বিবরণ", "টাকা"]];
+  DB.exp.forEach(function(x) {
+    rows.push([fd(x.d), x.cat || "অন্যান্য খরচ", x.t, x.a]);
+  });
+  downloadCSV("Tisha_Expense_Report_" + ds(new Date()) + ".csv", rows);
+};
+
+$("mk").onclick = function() {
+  $("bk").value = btoa(unescape(encodeURIComponent(JSON.stringify(DB))));
+  $("bk").select();
+  try {
+    document.execCommand("copy");
+    toast("📋 ব্যাকআপ কোড কপি হয়েছে! নিরাপদ স্থানে পেস্ট করে রাখুন।");
+  } catch (e) {}
+};
+
+$("ld").onclick = async function() {
+  try {
+    var a = JSON.parse(decodeURIComponent(escape(atob($("bk").value.trim()))));
+    if (!a.sales || !a.stock || !a.exp) throw 0;
+    var ok = await customDialog({
+      title: "ব্যাকআপ কোড লোড করবেন?",
+      msg: "বর্তমান ডাটা মুছে এই ব্যাকআপ কোডের ডাটা লোড হবে।"
+    });
+    if (ok) {
+      if (!Array.isArray(a.qinc)) a.qinc = [];
+      if (!Array.isArray(a.deposits)) a.deposits = [];
+      if (!a.customGeo) a.customGeo = { upz: {}, uni: {}, vil: {} };
+      if (!a.sync) a.sync = { webhookUrl: "", autoSync: true, lastSyncedAt: "", queue: [] };
+      DB = a;
+      sv(true);
+      selOpts();
+      updateCustomerDatalist();
+      loadSyncSettingsToInputs();
+      onUpazilaChange(true);
+      onUnionChange(true);
+      render();
+      toast("✅ ব্যাকআপ কোড থেকে ডাটা লোড হয়েছে!");
+    }
+  } catch (e) {
+    toast("❌ ব্যাকআপ কোডটি সঠিক নয়");
+  }
+};
+
+// Initial Render
+selOpts();
+updateCustomerDatalist();
+loadSyncSettingsToInputs();
+updateSyncUI();
+renderCart();
+render();
+
+/* ==========================================================================
+   13. EMBEDDED PWA MANIFEST & INLINE SERVICE WORKER FOR INSTALL PROMPT
+   ========================================================================== */
+function createStudioIconDataUrl(size) {
+  try {
+    var c = document.createElement("canvas");
+    c.width = size;
+    c.height = size;
+    var ctx = c.getContext("2d");
+    var grad = ctx.createLinearGradient(0, 0, size, size);
+    grad.addColorStop(0, "#1d4ed8");
+    grad.addColorStop(0.55, "#6d28d9");
+    grad.addColorStop(1, "#be185d");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, size, size, Math.round(size * 0.22));
+    ctx.fill();
+
+    ctx.fillStyle = "#ffffff";
+    var bw = size * 0.56;
+    var bh = size * 0.38;
+    var bx = (size - bw) / 2;
+    var by = (size - bh) / 2 + size * 0.03;
+    ctx.beginPath();
+    ctx.roundRect(bx, by, bw, bh, Math.round(size * 0.06));
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.roundRect(bx + bw * 0.16, by - size * 0.08, bw * 0.24, size * 0.09, Math.round(size * 0.03));
+    ctx.fill();
+
+    ctx.fillStyle = "#6d28d9";
+    ctx.beginPath();
+    ctx.arc(size / 2, by + bh / 2, size * 0.11, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(size / 2, by + bh / 2, size * 0.045, 0, Math.PI * 2);
+    ctx.fill();
+
+    return c.toDataURL("image/png");
+  } catch (e) {
+    return "";
+  }
+}
+
+function setupEmbeddedPWA() {
+  try {
+    var icon192 = createStudioIconDataUrl(192);
+    var icon512 = createStudioIconDataUrl(512);
+    if (icon192 && $("pwaAppleIcon")) {
+      $("pwaAppleIcon").href = icon192;
+    }
+
+    var icons = [];
+    if (icon192) icons.push({ src: icon192, sizes: "192x192", type: "image/png", purpose: "any" });
+    if (icon512) icons.push({ src: icon512, sizes: "512x512", type: "image/png", purpose: "any maskable" });
+
+    var manifestObj = {
+      id: "./",
+      name: "তিশা ডিজিটাল স্টুডিও – হিসাব ও ভাউচার Pro",
+      short_name: "তিশা স্টুডিও",
+      description: "তিশা ডিজিটাল স্টুডিও – ধলগ্রাম বাজার, বাঘারপাড়া, যশোর। দৈনিক হিসাব, ভাউচার, স্টক ও কাস্টমার খাতা।",
+      start_url: "./",
+      scope: "./",
+      display: "standalone",
+      background_color: "#0f172a",
+      theme_color: "#6d28d9",
+      icons: icons
+    };
+
+    var manifestJson = JSON.stringify(manifestObj);
+    var manifestLink = $("pwaManifestLink");
+    if (manifestLink) {
+      manifestLink.setAttribute("href", "data:application/manifest+json;charset=utf-8," + encodeURIComponent(manifestJson));
+    }
+
+    if ("serviceWorker" in navigator && (window.location.protocol === "https:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+      var swCode = [
+        "const CACHE_NAME = 'tisha-studio-pwa-v1';",
+        "self.addEventListener('install', event => {",
+        "  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['./']).catch(() => {})));",
+        "  self.skipWaiting();",
+        "});",
+        "self.addEventListener('activate', event => {",
+        "  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));",
+        "  self.clients.claim();",
+        "});",
+        "self.addEventListener('fetch', event => {",
+        "  if (event.request.method !== 'GET') return;",
+        "  event.respondWith(",
+        "    fetch(event.request).then(res => {",
+        "      const copy = res.clone();",
+        "      caches.open(CACHE_NAME).then(c => c.put(event.request, copy)).catch(() => {});",
+        "      return res;",
+        "    }).catch(() => caches.match(event.request).then(r => r || caches.match('./')))",
+        "  );",
+        "});"
+      ].join("\n");
+
+      var swBlob = new Blob([swCode], { type: "application/javascript" });
+      var swUrl = URL.createObjectURL(swBlob);
+      navigator.serviceWorker.register(swUrl, { scope: "./" }).then(function() {
+        setTimeout(function() { URL.revokeObjectURL(swUrl); }, 5000);
+      }).catch(function() {});
+    }
+  } catch (e) {}
+}
+
+window.addEventListener("load", setupEmbeddedPWA);
+setupEmbeddedPWA();
+</script>
+</body>
+</html>
