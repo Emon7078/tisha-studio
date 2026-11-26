@@ -7,8 +7,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="তিশা ডিজিটাল স্টুডিও">
-<link id="pwaManifestLink" rel="manifest" href="data:application/manifest+json,%7B%7D">
-<link id="pwaAppleIcon" rel="apple-touch-icon" href="">
+<link id="pwaManifestLink" rel="manifest" href="manifest.json">
+<link id="pwaAppleIcon" rel="apple-touch-icon" href="icon-192.png">
 <title>তিশা ডিজিটাল স্টুডিও – হিসাব ও ভাউচার Pro</title>
 <style>
 :root {
@@ -457,12 +457,13 @@ canvas#salesChart { width: 100%; height: 100%; display: block; }
 
   <div class="tabs">
     <button data-t="d" class="on">⚡ দৈনিক আয়-ব্যয়</button>
+    <button data-t="r">📊 রিপোর্ট ও ড্যাশবোর্ড</button>
     <button data-t="s">🧾 নতুন ভাউচার</button>
     <button data-t="l">📋 ভাউচার তালিকা</button>
     <button data-t="c">📒 কাস্টমার খাতা</button>
+    <button data-t="o">📕 বকেয়া খাতা</button>
     <button data-t="k">📦 স্টক</button>
     <button data-t="x">🏷️ কাজের রেট</button>
-    <button data-t="r">📊 রিপোর্ট ও ড্যাশবোর্ড</button>
     <button data-t="b">💾 ব্যাকআপ ও এক্সপোর্ট</button>
   </div>
 
@@ -732,6 +733,40 @@ canvas#salesChart { width: 100%; height: 100%; display: block; }
         <button class="b2" id="fullPaidBtn" type="button">💵 সম্পূর্ণ নগদ পরিশোধ</button>
       </div>
     </div>
+  </section>
+
+  <!-- TAB: CUSTOMER DUE KHATA (completely separate from daily accounts) -->
+  <section id="t-o" hidden>
+    <div id="khListView">
+      <div class="card">
+        <h3>📕 নতুন কাস্টমারের খাতা খুলুন</h3>
+        <small style="color:var(--mut)">এই খাতা প্রতিদিনের হিসাব, রিপোর্ট ও ড্যাশবোর্ড থেকে সম্পূর্ণ আলাদা। এখানে কম-বেশি করলে সেগুলোতে কিছু বদলাবে না।</small>
+        <div class="g3" style="margin-top:8px">
+          <div><label>কাস্টমারের নাম *</label><input id="kn" placeholder="নাম লিখুন"></div>
+          <div><label>মোবাইল / ঠিকানা (ঐচ্ছিক)</label><input id="kp" placeholder="01XXXXXXXXX"></div>
+          <div><label>আগের বকেয়া ৳ (থাকলে)</label><input type="number" id="kob" placeholder="0"></div>
+        </div>
+        <div class="g3" style="margin-top:8px">
+          <div><label>আগের বকেয়ার তারিখ (মনে থাকলে)</label><input type="date" id="kod"></div>
+        </div>
+        <div class="row"><button class="bg" id="kadd">➕ খাতা খুলুন</button></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h3>কাস্টমারদের খাতা</h3>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <input id="kq" placeholder="🔍 নাম / মোবাইল" style="max-width:170px">
+            <select id="kf" style="max-width:130px"><option value="all">সব</option><option value="due">বাকি আছে</option><option value="clear">বাকি নেই</option></select>
+          </div>
+        </div>
+        <div id="ksum" style="font-size:14px;margin-bottom:8px"></div>
+        <div class="tw"><table>
+          <thead><tr><th>কাস্টমার</th><th>মোবাইল</th><th>বর্তমান বাকি</th><th></th></tr></thead>
+          <tbody id="klist"></tbody>
+        </table></div>
+      </div>
+    </div>
+    <div id="khDetailView" style="display:none"></div>
   </section>
 
   <!-- TAB 2: VOUCHER LIST -->
@@ -1495,7 +1530,7 @@ $("rfrom").value = ds(d30);
 document.querySelectorAll(".tabs button").forEach(function(b) {
   b.onclick = function() {
     document.querySelectorAll(".tabs button").forEach(function(x) { x.classList.toggle("on", x === b); });
-    ["d", "s", "l", "c", "k", "x", "r", "b"].forEach(function(t) {
+    ["d", "s", "o", "l", "c", "k", "x", "r", "b"].forEach(function(t) {
       var el = $("t-" + t);
       if (el) el.hidden = t !== b.dataset.t;
     });
@@ -1960,6 +1995,7 @@ function sendVoucherWhatsApp(id) {
 
 function showV(id) {
   activeVoucherId = id;
+  $("vWa").style.display = "";
   var s = DB.sales.find(function(x) { return x.id === id; });
   if (!s) return;
   var du = Math.max(0, s.t - s.paid);
@@ -2013,6 +2049,144 @@ window.onafterprint = function() { document.body.className = ""; };
    8. RENDER LISTS, CUSTOMER LEDGER, STOCK & DAILY CASHBOOK
    ========================================================================== */
 
+
+/* ===== কাস্টমার বকেয়া খাতা (দৈনিক হিসাব থেকে সম্পূর্ণ আলাদা) ===== */
+var khOpen = null, khLastDate = "";
+function ensureKh() { if (!Array.isArray(DB.khata)) DB.khata = []; if (!DB.khSeq) DB.khSeq = 0; }
+function khNext() { ensureKh(); DB.khSeq++; return Date.now() * 10 + (DB.khSeq % 10); }
+function khCust(id) { ensureKh(); return DB.khata.find(function(x) { return x.id === id; }); }
+function khSorted(c) { return c.entries.slice().sort(function(a, b) { return a.d === b.d ? a.id - b.id : (a.d < b.d ? -1 : 1); }); }
+function khBal(c) { return c.entries.reduce(function(a, e) { return a + (e.t === "pay" ? -e.a : e.a); }, 0); }
+var KH_TYPES = { open: "🟠 আগের বকেয়া", work: "🔴 নতুন কাজ (বাকি যোগ)", pay: "🟢 টাকা জমা পেলাম" };
+$("kadd").onclick = function() {
+  ensureKh();
+  var nm = $("kn").value.trim();
+  if (!nm) return toast("⚠️ কাস্টমারের নাম লিখুন");
+  var c = { id: khNext(), n: nm, p: $("kp").value.trim(), entries: [] };
+  var ob = n($("kob").value);
+  if (ob > 0) c.entries.push({ id: khNext(), d: $("kod").value || ds(new Date()), t: "open", note: "আগের বকেয়া", a: ob });
+  DB.khata.push(c);
+  $("kn").value = $("kp").value = $("kob").value = $("kod").value = "";
+  sv(false, "বকেয়া খাতা", nm);
+  khRender();
+  khShow(c.id);
+};
+function khRender() {
+  ensureKh();
+  var q = ($("kq").value || "").trim().toLowerCase(), fl = $("kf").value, tot = 0, cnt = 0;
+  DB.khata.forEach(function(c) { var b = khBal(c); if (b > 0) { tot += b; cnt++; } });
+  $("ksum").innerHTML = "মোট পুরনো বকেয়া: <b class='due'>" + f(tot) + " ৳</b> (" + cnt + " জন)";
+  $("klist").innerHTML = DB.khata.filter(function(c) {
+    var b = khBal(c);
+    if (fl === "due" && b <= 0) return false;
+    if (fl === "clear" && b > 0) return false;
+    return !q || (c.n + " " + c.p).toLowerCase().indexOf(q) > -1;
+  }).slice().sort(function(a, b) { return a.n.localeCompare(b.n); }).map(function(c) {
+    var b = khBal(c);
+    return "<tr><td><b>" + esc(c.n) + "</b></td><td>" + esc(c.p || "—") + "</td><td class='" + (b > 0 ? "due" : "ok") + "'><b>" + f(b) + " ৳</b></td><td><button class='sm b2' onclick='khShow(" + c.id + ")'>📖 খাতা খুলুন</button></td></tr>";
+  }).join("") || "<tr><td colspan='4' style='text-align:center;color:var(--mut)'>কোনো খাতা নেই</td></tr>";
+  if (khOpen && khCust(khOpen)) khDetail();
+}
+$("kq").oninput = $("kf").onchange = khRender;
+function khShow(id) {
+  khOpen = id;
+  $("khListView").style.display = "none";
+  $("khDetailView").style.display = "";
+  khDetail();
+  window.scrollTo(0, 0);
+}
+function khBack() {
+  khOpen = null;
+  $("khDetailView").style.display = "none";
+  $("khListView").style.display = "";
+  khRender();
+}
+function khDetail() {
+  var c = khCust(khOpen);
+  if (!c) return khBack();
+  var run = 0;
+  var rows = khSorted(c).map(function(e) {
+    run += e.t === "pay" ? -e.a : e.a;
+    return "<tr><td>" + fd(e.d) + "</td><td>" + esc(e.note || "") + " <small style='color:var(--mut)'>" + (e.t === "pay" ? "জমা" : e.t === "open" ? "আগের বকেয়া" : "কাজ") + "</small></td>" +
+      "<td class='due'>" + (e.t === "pay" ? "" : f(e.a)) + "</td><td class='ok'>" + (e.t === "pay" ? f(e.a) : "") + "</td><td><b>" + f(run) + "</b></td>" +
+      "<td style='white-space:nowrap'><button class='sm bo' onclick='khEditAmt(" + e.id + ")'>✏️</button> <button class='sm br' onclick='khDelEntry(" + e.id + ")'>✖</button></td></tr>";
+  }).join("") || "<tr><td colspan='6' style='text-align:center;color:var(--mut)'>কোনো এন্ট্রি নেই</td></tr>";
+  var b = khBal(c);
+  $("khDetailView").innerHTML =
+    "<div class='card'><div class='card-head'><h3>📖 " + esc(c.n) + (c.p ? " <small style='color:var(--mut)'>· " + esc(c.p) + "</small>" : "") + "</h3>" +
+    "<div style='display:flex;gap:6px;flex-wrap:wrap'><button class='sm bmut' onclick='khBack()'>⬅ সব খাতা</button><button class='sm bg' onclick='khPrint()'>🖨️ প্রিন্ট</button><button class='sm br' onclick='khDelCust()'>🗑️ খাতা মুছুন</button></div></div>" +
+    "<div style='font-size:16px'>বর্তমান বাকি: <b class='" + (b > 0 ? "due" : "ok") + "'>" + f(b) + " ৳</b></div></div>" +
+    "<div class='card'><h3>➕ নতুন এন্ট্রি</h3><div class='g3'>" +
+    "<div><label>তারিখ</label><input type='date' id='khd' value='" + (khLastDate || ds(new Date())) + "'></div>" +
+    "<div><label>ধরন</label><select id='kht'><option value='work'>" + KH_TYPES.work + "</option><option value='pay'>" + KH_TYPES.pay + "</option><option value='open'>" + KH_TYPES.open + "</option></select></div>" +
+    "<div><label>টাকা ৳ *</label><input type='number' id='kha' placeholder='0'></div></div>" +
+    "<div style='margin-top:8px'><label>বিবরণ (কী কাজ / নোট)</label><input id='khn' placeholder='যেমন: ফটোকপি ২০ কপি / নগদ দিল'></div>" +
+    "<div class='row'><button class='bg' onclick='khAddEntry()'>✅ খাতায় লিখুন</button></div></div>" +
+    "<div class='card'><h3>খাতার হিসাব</h3><div class='tw'><table><thead><tr><th>তারিখ</th><th>বিবরণ</th><th>বাকি যোগ</th><th>জমা</th><th>বাকি</th><th></th></tr></thead><tbody>" + rows + "</tbody></table></div></div>";
+}
+function khAddEntry() {
+  var c = khCust(khOpen);
+  if (!c) return;
+  var a = n($("kha").value), d = $("khd").value;
+  if (!d) return toast("⚠️ তারিখ বসান");
+  if (a <= 0) return toast("⚠️ সঠিক টাকা লিখুন");
+  var t = $("kht").value, note = $("khn").value.trim();
+  khLastDate = d;
+  c.entries.push({ id: khNext(), d: d, t: t, note: note || (t === "pay" ? "জমা" : t === "open" ? "আগের বকেয়া" : "কাজ"), a: a });
+  sv(false, "বকেয়া খাতা এন্ট্রি", c.n);
+  khDetail();
+  toast("✅ খাতায় লেখা হয়েছে");
+}
+async function khEditAmt(eid) {
+  var c = khCust(khOpen), e = c && c.entries.find(function(x) { return x.id === eid; });
+  if (!e) return;
+  var res = await customDialog({ title: "টাকা সংশোধন", msg: (e.note || "") + " — নতুন টাকার পরিমাণ লিখুন", input: true, inputType: "number", defaultValue: f(e.a) });
+  var a = n(res);
+  if (a > 0) { e.a = a; sv(false, "বকেয়া খাতা সংশোধন", c.n); khDetail(); }
+}
+async function khDelEntry(eid) {
+  var c = khCust(khOpen);
+  if (!c) return;
+  var ok = await customDialog({ title: "এন্ট্রি মুছবেন?", msg: "শুধু এই খাতা থেকে মুছবে, দৈনিক হিসাবে কোনো প্রভাব পড়বে না।" });
+  if (!ok) return;
+  c.entries = c.entries.filter(function(x) { return x.id !== eid; });
+  sv(false, "বকেয়া এন্ট্রি মুছা", c.n);
+  khDetail();
+}
+async function khDelCust() {
+  var c = khCust(khOpen);
+  if (!c) return;
+  var ok = await customDialog({ title: "পুরো খাতা মুছবেন?", msg: c.n + " এর সব বকেয়া এন্ট্রি মুছে যাবে। দৈনিক হিসাবে কোনো প্রভাব পড়বে না।" });
+  if (!ok) return;
+  DB.khata = DB.khata.filter(function(x) { return x.id !== c.id; });
+  sv(false, "বকেয়া খাতা মুছা", c.n);
+  khBack();
+}
+function khPrint() {
+  var c = khCust(khOpen);
+  if (!c) return;
+  activeVoucherId = null;
+  $("vWa").style.display = "none";
+  var now = new Date();
+  var pt = fd(ds(now)) + " · " + p2(now.getHours()) + ":" + p2(now.getMinutes());
+  var run = 0, td = 0, tp = 0;
+  var rows = khSorted(c).map(function(e, k) {
+    if (e.t === "pay") { run -= e.a; tp += e.a; } else { run += e.a; td += e.a; }
+    return "<tr><td>" + (k + 1) + "</td><td>" + fd(e.d) + "</td><td>" + esc(e.note || "") + "</td><td>" + (e.t === "pay" ? "" : f(e.a)) + "</td><td>" + (e.t === "pay" ? f(e.a) : "") + "</td><td>" + f(run) + "</td></tr>";
+  }).join("");
+  var h = "<div class='vh-wrap'><div class='vh'><h2>তিশা ডিজিটাল স্টুডিও</h2>" +
+    "<p>Every Moment of Memories, In Our Frame · 100% Assured Service</p><p>ধলগ্রাম বাজার, বাঘারপাড়া, যশোর</p>" +
+    "<p><b>প্রোঃ মোঃ ইমন হোসেন</b> · মোবাইল: 01892-287078, 01973-287078</p></div></div>" +
+    "<p style='text-align:center;font-weight:700;margin:6px 0'>— বকেয়া হিসাব খাতা —</p>" +
+    "<div style='display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:6px'><span>কাস্টমার: <b>" + esc(c.n) + "</b>" + (c.p ? " · " + esc(c.p) : "") + "</span><span>প্রিন্টের তারিখ: <b>" + pt + "</b></span></div>" +
+    "<table><thead><tr><th>নং</th><th>তারিখ</th><th>বিবরণ</th><th>বাকি যোগ</th><th>জমা</th><th>বাকি</th></tr></thead><tbody>" + rows + "</tbody></table>" +
+    "<div class='tot' style='font-size:13.5px;color:#000'>মোট বাকি যোগ: " + f(td) + " ৳<br>মোট জমা: " + f(tp) + " ৳<br><b>বর্তমান বাকি (Due): " + f(td - tp) + " ৳</b></div>" +
+    "<div class='sig'><span>ক্রেতার স্বাক্ষর</span><span>বিক্রেতার স্বাক্ষর</span></div>";
+  $("vp").innerHTML = h;
+  $("vp").className = printMode === "pos" ? "pos-mode" : "";
+  $("vch").style.display = "block";
+}
+
 /* ===== কাজের রেট ও খরচ ===== */
 function renderRates() {
   ensureRates();
@@ -2056,6 +2230,7 @@ $("radd").onclick = function() {
 $("rq").oninput = renderRates;
 
 function render() {
+  khRender();
   renderRates();
   renderDailyCashbook();
 
@@ -2589,6 +2764,8 @@ function buildSnapshotPayload(mode) {
       qinc: DB.qinc,
       deposits: DB.deposits,
       rates: DB.rates,
+      khata: DB.khata,
+      khSeq: DB.khSeq,
       seq: DB.seq,
       customGeo: DB.customGeo
     }
@@ -2606,6 +2783,7 @@ function applyRemoteSnapshot(remoteData) {
   DB.qinc = Array.isArray(src.qinc) ? src.qinc : [];
   DB.deposits = Array.isArray(src.deposits) ? src.deposits : [];
   if (Array.isArray(src.rates)) DB.rates = src.rates;
+  if (Array.isArray(src.khata)) { DB.khata = src.khata; DB.khSeq = Math.max(n(DB.khSeq), n(src.khSeq)); }
   DB.seq = Math.max(n(DB.seq), n(src.seq), DB.sales.length);
   if (src.customGeo && typeof src.customGeo === "object") {
     DB.customGeo = {
@@ -3095,69 +3273,13 @@ function createStudioIconDataUrl(size) {
 
 function setupEmbeddedPWA() {
   try {
-    var icon192 = createStudioIconDataUrl(192);
-    var icon512 = createStudioIconDataUrl(512);
-    if (icon192 && $("pwaAppleIcon")) {
-      $("pwaAppleIcon").href = icon192;
-    }
-
-    var icons = [];
-    if (icon192) icons.push({ src: icon192, sizes: "192x192", type: "image/png", purpose: "any" });
-    if (icon512) icons.push({ src: icon512, sizes: "512x512", type: "image/png", purpose: "any maskable" });
-
-    var manifestObj = {
-      id: "./",
-      name: "তিশা ডিজিটাল স্টুডিও – হিসাব ও ভাউচার Pro",
-      short_name: "তিশা স্টুডিও",
-      description: "তিশা ডিজিটাল স্টুডিও – ধলগ্রাম বাজার, বাঘারপাড়া, যশোর। দৈনিক হিসাব, ভাউচার, স্টক ও কাস্টমার খাতা।",
-      start_url: "./",
-      scope: "./",
-      display: "standalone",
-      background_color: "#0f172a",
-      theme_color: "#6d28d9",
-      icons: icons
-    };
-
-    var manifestJson = JSON.stringify(manifestObj);
-    var manifestLink = $("pwaManifestLink");
-    if (manifestLink) {
-      manifestLink.setAttribute("href", "data:application/manifest+json;charset=utf-8," + encodeURIComponent(manifestJson));
-    }
-
-    if ("serviceWorker" in navigator && (window.location.protocol === "https:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
-      var swCode = [
-        "const CACHE_NAME = 'tisha-studio-pwa-v1';",
-        "self.addEventListener('install', event => {",
-        "  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['./']).catch(() => {})));",
-        "  self.skipWaiting();",
-        "});",
-        "self.addEventListener('activate', event => {",
-        "  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));",
-        "  self.clients.claim();",
-        "});",
-        "self.addEventListener('fetch', event => {",
-        "  if (event.request.method !== 'GET') return;",
-        "  event.respondWith(",
-        "    fetch(event.request).then(res => {",
-        "      const copy = res.clone();",
-        "      caches.open(CACHE_NAME).then(c => c.put(event.request, copy)).catch(() => {});",
-        "      return res;",
-        "    }).catch(() => caches.match(event.request).then(r => r || caches.match('./')))",
-        "  );",
-        "});"
-      ].join("\n");
-
-      var swBlob = new Blob([swCode], { type: "application/javascript" });
-      var swUrl = URL.createObjectURL(swBlob);
-      navigator.serviceWorker.register(swUrl, { scope: "./" }).then(function() {
-        setTimeout(function() { URL.revokeObjectURL(swUrl); }, 5000);
-      }).catch(function() {});
+    if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+      navigator.serviceWorker.register("sw.js").catch(function() {});
     }
   } catch (e) {}
 }
 
 window.addEventListener("load", setupEmbeddedPWA);
-setupEmbeddedPWA();
 </script>
 </body>
 </html>
